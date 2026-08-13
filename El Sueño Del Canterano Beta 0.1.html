@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚽ El Sueño del Canterano - Ultimate</title>
+<style>
+:root{--bg:#0a0f1e;--panel:#141c30;--panel2:#1a2540;--txt:#e2e8f0;--dim:#8899bb;--acc:#3b82f6;--grn:#22c55e;--red:#ef4444;--gold:#f59e0b;--pur:#a855f7;--pink:#ec4899;--border:#263350}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+body{background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+.hidden{display:none!important}
+button{background:var(--panel2);color:var(--txt);border:1px solid var(--border);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:.85rem;transition:.15s;margin:3px}
+button:hover{background:#243352;transform:translateY(-1px)}
+button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+button.prim{background:var(--acc);border-color:#5b9cf6}
+button.grn{background:#166534;border-color:var(--grn)}
+button.red{background:#7f1d1d;border-color:var(--red)}
+button.gold{background:#78350f;border-color:var(--gold)}
+button.pur{background:#581c87;border-color:var(--pur)}
+input,select{width:100%;padding:10px;margin:5px 0;background:#0d1526;border:1px solid var(--border);color:#fff;border-radius:8px;font-size:.9rem}
+.wrap{max-width:640px;margin:0 auto;padding:12px;padding-bottom:60px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+.card h3{margin-bottom:10px;font-size:1rem}
+.bar-bg{height:10px;background:#0d1526;border-radius:5px;overflow:hidden;flex:1}
+.bar-fill{height:100%;border-radius:5px;transition:width .4s}
+.stat-row{display:flex;align-items:center;gap:8px;font-size:.8rem;margin:4px 0}
+.stat-row span:first-child{min-width:90px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button{flex:1;min-width:70px;padding:8px 4px;font-size:.75rem;text-align:center}
+.tabs button.on{background:var(--acc);border-color:#7cb3ff}
+.topbar{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:2px solid var(--acc);padding:10px 14px;border-radius:0 0 12px 12px}
+.log-box{max-height:180px;overflow-y:auto;font-size:.8rem;color:var(--dim)}
+.log-box div{padding:4px 0;border-bottom:1px dashed #1e2d4a}
+.log-box .hi{color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:8px}
+th,td{padding:5px 6px;text-align:left;border-bottom:1px solid var(--border)}
+th{color:var(--acc);font-size:.72rem}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.7rem;margin:2px}
+.tag.grn{background:#166534}.tag.gold{background:#78350f}.tag.red{background:#7f1d1d}.tag.pur{background:#581c87}.tag.blue{background:#1e3a5f}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal-box{background:var(--panel);border:2px solid var(--acc);border-radius:16px;padding:24px;max-width:440px;width:100%;max-height:85vh;overflow-y:auto;text-align:center}
+.app-view{position:fixed;inset:0;background:var(--bg);z-index:200;overflow-y:auto;padding:16px}
+.app-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.app-head h2{font-size:1.1rem}
+.chat-b{padding:10px;border-radius:12px;margin:6px 0;font-size:.85rem;max-width:85%}
+.chat-b.them{background:#1e2d4a;margin-right:auto}
+.chat-b.me{background:#1e40af;margin-left:auto}
+.chat-b .who{font-size:.65rem;color:var(--dim);margin-bottom:3px}
+.warn-box{background:#7f1d1d;padding:8px;border-radius:8px;font-size:.8rem;margin:8px 0;border:1px solid var(--red)}
+.dim{color:var(--dim)}
+#phone-toggle{position:fixed;right:14px;bottom:14px;z-index:150;width:58px;height:58px;border-radius:50%;background:var(--acc);font-size:1.7rem;border:none;box-shadow:0 6px 18px rgba(0,0,0,.6)}
+/* TELÉFONO MÁS GRANDE */
+.phone-bar{position:fixed;right:12px;left:auto;transform:none;bottom:82px;max-width:430px;width:min(430px,calc(100vw - 24px));border-radius:26px;border:2px solid #334155;background:#000;padding:10px 12px 6px;box-shadow:0 8px 30px rgba(0,0,0,.7);max-height:78vh;overflow-y:auto;z-index:140}
+.phone-status{display:flex;justify-content:space-between;font-size:.7rem;color:#94a3b8;padding:2px 10px 8px}
+.phone-grid-wrap{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+/* APPS 4x5 (4 columnas, 5 filas por página) y botones más grandes */
+.phone-page{flex:0 0 100%;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;scroll-snap-align:start}
+.phone-page button{background:#0f172a;border-radius:16px;padding:14px 4px;font-size:.75rem;text-align:center;border:1px solid #1e293b}
+.phone-page button .ico{font-size:1.7rem;display:block;margin-bottom:2px}
+.phone-dots{display:flex;justify-content:center;gap:4px;margin:6px 0}
+.phone-dots span{width:7px;height:7px;border-radius:50%;background:#475569}
+.phone-dots span.on{background:#fff}
+.home-indicator{width:120px;height:4px;background:#475569;border-radius:2px;margin:8px auto 4px}
+.casino-neon{background:linear-gradient(135deg,#2d0a4a,#4a0a2d);border:2px solid #ff00ff;border-radius:12px;padding:16px;position:relative;overflow:hidden}
+.casino-neon::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(255,0,255,.15),transparent 60%),radial-gradient(circle at 70% 70%,rgba(0,255,255,.15),transparent 60%);pointer-events:none}
+.neon-title{color:#ff00ff;text-shadow:0 0 8px #ff00ff,0 0 16px #ff00ff;font-size:1.2rem;letter-spacing:2px}
+.slot-reels{display:flex;gap:6px;justify-content:center;margin:10px 0}
+.reel{width:50px;height:60px;background:#000;border:2px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+.reel.spinning{animation:spin .15s linear infinite}
+@keyframes spin{0%{transform:translateY(-10px)}50%{transform:translateY(10px)}100%{transform:translateY(-10px)}}
+.crash-mult{font-size:2rem;font-weight:bold;color:var(--gold);text-align:center;padding:10px}
+.crash-mult.boom{color:var(--red);animation:boom .3s}
+@keyframes boom{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
+.rain{position:fixed;pointer-events:none;z-index:9999;font-size:1.5rem;animation:fall 2s linear}
+@keyframes fall{to{transform:translateY(100vh);opacity:0}}
+.snake-canvas{background:#000;border:2px solid var(--grn);border-radius:8px;display:block;margin:10px auto}
+.trophy-shelf{background:linear-gradient(135deg,#3a2817,#5a4027);border:2px solid var(--gold);border-radius:12px;padding:12px;margin:8px 0}
+.trophy-item{display:inline-block;padding:6px 10px;background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:8px;margin:3px;color:#000;font-weight:bold;font-size:.75rem;box-shadow:0 2px 4px rgba(0,0,0,.5)}
+.trophy-item.silver{background:linear-gradient(135deg,#9ca3af,#6b7280);color:#fff}
+.trophy-item.bronze{background:linear-gradient(135deg,#b45309,#78350f);color:#fff}
+.club-card{background:linear-gradient(135deg,#1e3a5f,#0d2240);border:2px solid var(--acc);border-radius:12px;padding:14px;margin:10px 0}
+</style>
+</head>
+<body>
+
+<div id="scr-start" class="wrap" style="text-align:center;padding-top:40px">
+<h1 style="font-size:1.6rem;margin-bottom:6px">⚽ EL SUEÑO DEL CANTERANO</h1>
+<p style="color:var(--dim);margin-bottom:20px">"Del Barrio a la Cima... o al Sofá" — Edición Ultimate</p>
+<div class="card">
+<button class="prim" style="width:100%;padding:14px;font-size:1rem" onclick="go('create')">👶 NUEVA VIDA</button>
+<button style="width:100%;margin-top:8px" onclick="loadGame()">💾 CONTINUAR PARTIDA</button>
+<button class="red" style="width:100%;margin-top:8px;font-size:.75rem" onclick="wipeAll()">🗑️ Borrar todo</button>
+</div>
+<div class="card" style="text-align:left;font-size:.82rem;color:var(--dim)">
+<b>🎯 Cómo jugar:</b> Pulsa NUEVA VIDA y COMENZAR. Teléfono grande con apps 4x5. Hijos sin límite (16+, 1/año, vía sexo). Tabla muestra TU equipo. Escuela: sal a los 14 o gradúate para universidad. Jóvenes fichan por clubes LOCALES.
+</div>
+</div>
+
+<div id="scr-create" class="wrap hidden">
+<h2 style="text-align:center;margin-bottom:12px">👶 Nacimiento</h2>
+<div class="card">
+<label>👤 Nombre:</label><input id="c-nom" value="Mateo">
+<label>👤 Apellido:</label><input id="c-ape" value="García">
+<label>✏️ Apodo:</label><input id="c-apo" value="La Joya">
+<label>🌍 País:</label><select id="c-pais"></select>
+<label>🏠 Clase:</label><select id="c-clase"><option value="r">🎲 Aleatoria</option><option value="0">🟤 Pobre</option><option value="1">🟡 Media</option><option value="2">🟢 Adinerada</option></select>
+<label>⚽ Posición:</label><select id="c-pos"><option>POR</option><option>DFC</option><option>LD</option><option>LI</option><option>MCD</option><option>MC</option><option>MCO</option><option>ED</option><option>EI</option><option selected>DC</option></select>
+<label>🎚️ Dificultad:</label><select id="c-dif"><option value="0">🟢 Fácil</option><option value="1" selected>🟡 Normal</option><option value="2">🔴 Difícil</option><option value="3">⚫ Leyenda</option></select>
+<label style="display:flex;align-items:center;gap:8px;margin-top:10px"><input type="checkbox" id="c-iron" style="width:auto">💀 Ironman</label>
+<button class="prim" style="width:100%;margin-top:14px;padding:13px;font-size:1rem" onclick="newLife()">▶️ COMENZAR</button>
+<button style="width:100%;margin-top:6px" onclick="go('start')">⬅️ Volver</button>
+</div>
+</div>
+
+<div id="scr-game" class="wrap hidden">
+<div class="topbar" id="topbar"></div>
+<div id="main-area"></div>
+<div class="log-box card" id="log-card"><h3>📜 Diario</h3><div id="log-list"></div></div>
+</div>
+
+<button id="phone-toggle" class="hidden" onclick="togglePhone()">📱</button>
+
+<div class="phone-bar hidden" id="phone-bar">
+<div class="phone-status"><span>📶 5G</span><span id="phone-time">--:--</span><span id="phone-batt">🔋 100%</span></div>
+<div class="phone-grid-wrap" id="phone-wrap"></div>
+<div class="phone-dots" id="phone-dots"></div>
+<div class="home-indicator"></div>
+</div>
+
+<div class="app-view hidden" id="app-view">
+<div class="app-head"><button onclick="closeApp()">⬅️</button><h2 id="app-title">App</h2></div>
+<div id="app-body"></div>
+</div>
+
+<div class="modal-bg hidden" id="modal"><div class="modal-box" id="modal-box"></div></div>
+
+<script>
+// ================= DATA =================
+const PAISES=[
+{n:"Panamá",f:"🇵🇦",casino:1,str:62},{n:"Argentina",f:"🇦🇷",casino:1,str:90},{n:"Brasil",f:"🇧🇷",casino:1,str:91},
+{n:"España",f:"🇪🇸",casino:1,str:92},{n:"Inglaterra",f:"🏴",casino:1,str:92},{n:"México",f:"🇲🇽",casino:1,str:78},
+{n:"Colombia",f:"🇨🇴",casino:1,str:80},{n:"EEUU",f:"🇺🇸",casino:1,str:77},{n:"Alemania",f:"🇩🇪",casino:1,str:89},
+{n:"Francia",f:"🇫🇷",casino:1,str:91},{n:"Italia",f:"🇮🇹",casino:1,str:87},{n:"Uruguay",f:"🇺🇾",casino:1,str:82},
+{n:"Chile",f:"🇨🇱",casino:1,str:76},{n:"Ecuador",f:"🇪🇨",casino:1,str:74},{n:"Paraguay",f:"🇵🇾",casino:1,str:72},
+{n:"Perú",f:"🇵🇪",casino:1,str:73},{n:"Bolivia",f:"🇧🇴",casino:1,str:64},{n:"Venezuela",f:"🇻🇪",casino:1,str:70},
+{n:"Costa Rica",f:"🇨🇷",casino:1,str:68},{n:"Honduras",f:"🇭🇳",casino:1,str:60},{n:"Guatemala",f:"🇬",casino:1,str:58},
+{n:"El Salvador",f:"🇸🇻",casino:1,str:57},{n:"Portugal",f:"🇵🇹",casino:1,str:86},{n:"Países Bajos",f:"🇳",casino:1,str:84},
+{n:"Nigeria",f:"🇳🇬",casino:1,str:78},{n:"Marruecos",f:"🇲🇦",casino:0,str:80},{n:"Japón",f:"🇯🇵",casino:0,str:74},
+{n:"Corea del Sur",f:"🇰🇷",casino:0,str:76},{n:"Arabia Saudita",f:"🇸🇦",casino:0,str:72},{n:"Qatar",f:"🇶🇦",casino:0,str:70}
+];
+const MESES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const NOMBRES=["Lucas","Thiago","Santiago","Nicolás","Alejandro","Daniel","Sebastián","Emiliano","Joaquín","Mateo","Bruno","Facundo","Juan","Carlos","Andrés","Felipe","Diego","Martín","Pablo","Sergio","Kevin","Cristian","Gabriel","Hugo","Iván","Óscar","Raúl","Enzo","Franco","Agustín"];
+const APELLIDOS=["Rodríguez","Martínez","López","González","Hernández","Sánchez","Ramírez","Torres","Flores","Rivera","Gómez","Díaz","Cruz","Morales","Reyes","Silva","Castro","Rojas","Medina","Aguilar","Vargas","Mendoza","Ortiz","Delgado","Peña","Cano","Molina","Suárez","Vega","Ríos"];
+const LIGAS=[
+{liga:'LaLiga',pais:'España',conf:'UEFA',cal:'Ago–May',fac:5,clubs:['Real Madrid','Barcelona','Atlético','Sevilla']},
+{liga:'Premier League',pais:'Inglaterra',conf:'UEFA',cal:'Ago–May',fac:5,clubs:['Man City','Man United','Liverpool','Arsenal','Chelsea']},
+{liga:'Serie A',pais:'Italia',conf:'UEFA',cal:'Ago–May',fac:4,clubs:['Juventus','Inter','AC Milan','Napoli']},
+{liga:'Bundesliga',pais:'Alemania',conf:'UEFA',cal:'Ago–May',fac:5,clubs:['Bayern Múnich','Borussia Dortmund']},
+{liga:'Ligue 1',pais:'Francia',conf:'UEFA',cal:'Ago–May',fac:4,clubs:['PSG','Marsella']},
+{liga:'Eredivisie',pais:'Países Bajos',conf:'UEFA',cal:'Ago–May',fac:3,clubs:['Ajax','PSV']},
+{liga:'Liga MX',pais:'México',conf:'CONCACAF',cal:'Ene–Dic',fac:3,clubs:['América','Tigres UANL','Monterrey']},
+{liga:'MLS',pais:'Estados Unidos',conf:'CONCACAF',cal:'Feb–Nov',fac:3,clubs:['Inter Miami','LAFC','LA Galaxy']},
+{liga:'Brasileirão',pais:'Brasil',conf:'CONMEBOL',cal:'Abr–Dic',fac:3,clubs:['Flamengo','Palmeiras','São Paulo']},
+{liga:'Liga Profesional',pais:'Argentina',conf:'CONMEBOL',cal:'Ene–Dic',fac:3,clubs:['Boca Juniors','River Plate']},
+{liga:'Liga Panameña',pais:'Panamá',conf:'CONCACAF',cal:'Ene–Dic',fac:2,clubs:['Tauro','Árabe Unido','Sporting SM','Chorrillo','Plaza Amador']},
+{liga:'Saudi Pro League',pais:'Arabia Saudita',conf:'AFC',cal:'Ago–May',fac:2,clubs:['Al-Nassr','Al-Hilal','Al-Ittihad','Al-Ahli']}
+];
+const SNEAKERS=[
+['Air Force 1 Triple White',120,2],['Jordan 1 High Chicago',450,8],['Yeezy Boost 350 Zebra',380,7],['Travis Scott x Jordan 1',900,14],
+['Nike Dunk Low Panda',140,3],['Kobe 6 Protro Grinch',700,12],['Adidas Samba OG',110,2],['New Balance 550 Aimé',350,6],
+['Balenciaga Triple S',950,10],['Nike Mag Back to Future',5000,30],['Jordan 4 Off-White',800,13],['Rick Owens Geobasket',1200,15],
+['Bape Sta OG Camo',500,8],['Puma Suede Classic',90,2],['Converse CDG Heart',180,4],['Vans Old Skool Flame',85,2],
+['Asics Gel-Kayano 14',220,5],['Salomon XT-6',280,6],['Off-White Air Presto',750,11],['Adidas Forum Bad Bunny',250,6],
+['Hoodie Oversized Diseñador',350,5],['Chamarra Cuero Biker',800,9],['Cadena Oro 18k',2500,15],['Rolex Submariner Diamond',15000,25],
+['Gafas Futurist Viper',450,6],['Pantalones Cargo Baggy',180,3],['Chaleco Táctico Calle',320,5],['Playera Vintage Graphic',120,2],
+['Cinto Gucci Hebilla',650,8],['Tracksuit Terciopelo',500,7],['Varsity Jacket',400,6],['Anillos Plata Gemas',280,4],
+['Gorra New Era Limitada',90,2],['Bufanda Louis Vuitton',800,10],['Bandolera Dior',1500,14],['Pants Monogram',400,5],
+['Abrigo Lana Padrino',1200,12],['Pulsera Tennis Diamantes',3500,18],['Pijama Seda VIP',300,4],['Grillz Diamantes',4500,20],
+['Puffer Moncler',1800,16],['Shorts Mitchell Ness',200,3],['Sombrero Fedora',350,5],['Blazer Terciopelo',700,9],
+['Maletín Goyard',3000,18],['Reloj Richard Mille',50000,30],['Balaclava Seda',180,3],['Pants Sergio Tacchini',220,4],
+['Yeezy Slides',150,3],['Traje Hilo de Oro',25000,28]
+];
+const BRANDS=[
+{n:'Nike',tipo:'👟 Deportivo',req:15,pay:500,cat:'deportiva'},{n:'Adidas',tipo:'👟 Deportivo',req:20,pay:600,cat:'deportiva'},
+{n:'Puma',tipo:'👟 Deportivo',req:25,pay:700,cat:'deportiva'},{n:'Under Armour',tipo:'👟 Deportivo',req:30,pay:800,cat:'deportiva'},
+{n:'Reebok',tipo:'👟 Deportivo',req:35,pay:850,cat:'deportiva'},{n:'New Balance',tipo:'👟 Deportivo',req:40,pay:900,cat:'deportiva'},
+{n:'Asics',tipo:'👟 Deportivo',req:45,pay:950,cat:'deportiva'},{n:'Oakley',tipo:'👟 Deportivo',req:50,pay:1000,cat:'deportiva'},
+{n:'Gucci',tipo:'🌍 Lujo',req:55,pay:2500,cat:'lujo'},{n:'Balenciaga',tipo:'🌍 Lujo',req:60,pay:2800,cat:'lujo'},
+{n:'Louis Vuitton',tipo:'🌍 Lujo',req:65,pay:3000,cat:'lujo'},{n:'Dior',tipo:'🌍 Lujo',req:60,pay:2800,cat:'lujo'},
+{n:'Prada',tipo:'🌍 Lujo',req:65,pay:3000,cat:'lujo'},{n:'Rolex',tipo:'🌍 Lujo',req:55,pay:2500,cat:'lujo'},
+{n:'Red Bull',tipo:'📺 Bebida',req:30,pay:1000,cat:'bebida'},{n:'Monster Energy',tipo:'📺 Bebida',req:25,pay:800,cat:'bebida'},
+{n:'Gatorade',tipo:'📺 Bebida',req:20,pay:600,cat:'bebida'},{n:'Coca-Cola',tipo:'📺 Bebida',req:25,pay:800,cat:'bebida'},
+{n:'Apple',tipo:'📺 Tech',req:50,pay:2000,cat:'tech'},{n:'Samsung',tipo:'📺 Tech',req:45,pay:1800,cat:'tech'},
+{n:'PlayStation',tipo:'📺 Tech',req:40,pay:1500,cat:'tech'},{n:'Xbox',tipo:'📺 Tech',req:40,pay:1500,cat:'tech'},
+{n:'Ferrari',tipo:'🏎️ Auto',req:70,pay:4000,cat:'auto'},{n:'Lamborghini',tipo:'🏎️ Auto',req:70,pay:4000,cat:'auto'},
+{n:'Porsche',tipo:'🏎️ Auto',req:65,pay:3500,cat:'auto'},{n:'BMW M',tipo:'🏎️ Auto',req:55,pay:2500,cat:'auto'},
+{n:'McDonalds',tipo:'📺 Lifestyle',req:15,pay:400,cat:'life'},{n:'Binance',tipo:'📺 Lifestyle',req:40,pay:1500,cat:'life'},
+{n:'EA Sports',tipo:'📺 Tech',req:45,pay:1800,cat:'tech'},{n:'Spotify',tipo:'📺 Lifestyle',req:35,pay:1200,cat:'life'}
+];
+const FOODS=[
+{icon:"🍕",n:"Pizza",p:40,fx:{felicidad:5,salud:-2}},{icon:"🍣",n:"Sushi",p:90,fx:{salud:4,energia:6}},
+{icon:"🥩",n:"Asado",p:80,fx:{fisico:1,felicidad:4}},{icon:"🥦",n:"Proteína",p:70,fx:{fisico:1,tecnica:0.5}},
+{icon:"🥤",n:"Isotónica",p:45,fx:{energia:20}},{icon:"🍝",n:"Pasta",p:55,fx:{energia:8,felicidad:3}},
+{icon:"🍎",n:"Fruta",p:25,fx:{salud:3}},{icon:"☕",n:"Café",p:18,fx:{energia:10,mental:2}},
+{icon:"🌮",n:"Tacos",p:35,fx:{felicidad:4,salud:-1}},{icon:"🍔",n:"Hamburguesa",p:38,fx:{felicidad:4,salud:-2}}
+];
+const ANTICONCEPTIVOS=[
+{n:'💊 Pastillas Anticonceptivas',p:30,duracion:30,eficacia:0.99},
+{n:'🛡️ Condones (pack)',p:15,duracion:10,eficacia:0.98},
+{n:'💉 Implante Hormonal',p:200,duracion:90,eficacia:0.995},
+{n:'🔬 DIU',p:400,duracion:365,eficacia:0.999}
+];
+const BOTINES=[
+{icon:"👟",n:"Botines Básicos",p:50,fx:{},drip:1},{icon:"👟",n:"Botines Pro",p:300,fx:{tecnica:2},drip:3},
+{icon:"⚡",n:"Botines Élite",p:1000,fx:{velocidad:3,tecnica:2},drip:6},{icon:"🌟",n:"Botines Dorados",p:5000,fx:{velocidad:4,tecnica:4,fisico:2},drip:15}
+];
+const LUJOS=[{n:'🏰 Mansión',p:10000,mant:500},{n:'🛥️ Yate',p:30000,mant:1000},{n:'🏝️ Isla Privada',p:50000,mant:2000},{n:'🛩️ Jet Privado',p:100000,mant:5000}];
+const VACACIONES=[
+{n:'🏖️ Playa (Cancún)',p:2000,felicidad:12,mental:8,energia:15,dias:7},
+{n:'🏖️ Caribe (Punta Cana)',p:3500,felicidad:15,mental:10,energia:18,dias:7},
+{n:'🏔️ Montaña (Aspen)',p:4000,felicidad:10,mental:12,energia:15,dias:5},
+{n:'🗼 Europa (París)',p:5000,felicidad:18,mental:15,energia:12,dias:10,fama:3},
+{n:'🗻 Asia (Tokio)',p:6000,felicidad:20,mental:18,energia:14,dias:12,fama:4},
+{n:'🌴 Maldivas (Lujo)',p:15000,felicidad:25,mental:22,energia:25,dias:7,fama:5},
+{n:'🏝️ Isla Privada',p:25000,felicidad:30,mental:28,energia:30,dias:14,fama:8},
+{n:'🏕️ Camping (Económico)',p:500,felicidad:6,mental:5,energia:8,dias:4}
+];
+const EMPS=[
+{n:'👕 Ropa',p:300,cat:['Camisetas','Pantalones','Hoodies','Gorras']},
+{n:'🏋️ Gym',p:5000,cat:['Membresías','Clases','Suplementos']},
+{n:'📱 App',p:1000,cat:['Suscripción Premium','Anuncios','Compras in-app']},
+{n:'🍔 Restaurante',p:3000,cat:['Platos','Bebidas','Delivery','Eventos']},
+{n:'🏢 Bienes Raíces',p:20000,cat:['Alquiler','Venta','Comercial']},
+{n:'🎮 Esports',p:15000,cat:['Patrocinios','Torneos','Merch']},
+{n:'💈 Barbería',p:800,cat:['Cortes','Barba','Productos']},
+{n:'👟 Marca Propia',p:5000,cat:['Sneakers','Ropa','Accesorios']}
+];
+const CURSOS={finanzas:{n:"💰 Finanzas",p:500},marketing:{n:"📢 Marketing",p:400},idiomas:{n:"🗣️ Idiomas",p:350},oratoria:{n:"🎤 Oratoria",p:300},derecho:{n:"⚖️ Derecho Deportivo",p:600}};
+const CLUB_TIERS={
+CHICO:['Deportivo Barrio','Atlético Ciudad','Real Provincial','Unión Norte','FC Costa','Racing Local','Tauro','Sporting SM'],
+MEDIANO:['Nacional Sur','Independiente Este','Ajax','River Plate','América','Peñarol','Inter Miami','LAFC'],
+GRANDE:['Real Madrid','Barcelona','Man City','Bayern Múnich','PSG','Juventus','Inter','Flamengo'],
+ELITE:['Real Madrid','Barcelona','Man City','PSG','Bayern Múnich']
+};
+const ACTIVIDADES_JOVENES=[
+{n:'🎬 Ir al Cine',p:25,fx:{felicidad:6,energia:-5}},
+{n:'🎵 Concierto',p:120,fx:{felicidad:12,energia:-15,fama:1}},
+{n:'🎢 Parque Diversiones',p:40,fx:{felicidad:8,energia:-10}},
+{n:'🎮 Arcade',p:20,fx:{felicidad:5,energia:-3}}
+];
+const EVENTOS_FAMA=[
+{n:'🎬 Rodaje Comercial TV',p:0,req:25,energ:-25,fama:5,pago:8000},
+{n:'📸 Portada Revista',p:0,req:35,energ:-20,fama:8,pago:12000},
+{n:'📺 Late Night Show',p:0,req:30,energ:-15,fama:6,pago:5000},
+{n:'🎙️ Podcast Top',p:0,req:20,energ:-10,fama:4,pago:3000},
+{n:'🎮 Stream con Famoso',p:0,req:25,energ:-15,fama:7,pago:6000},
+{n:'🎥 Documental Netflix',p:0,req:60,energ:-30,fama:20,pago:80000}
+];
+const BODAS=[
+{n:'🏖️ Boda Playa',p:15000,fama:10,rep:5},
+{n:'🏰 Boda Real Castillo',p:80000,fama:25,rep:15},
+{n:'💍 Boda Las Vegas',p:5000,fama:5,rep:2},
+{n:'🌃 Boda VIP Dubái',p:150000,fama:40,rep:20}
+];
+const PREGUNTAS_PRENSA={
+victoria:['¿Cómo te sentiste en el partido?','¿Qué opinas del rendimiento?','¿A quién dedicas la victoria?','¿Pueden pelear el título?','¿Cómo ves al próximo rival?','¿Mensaje a la afición?','¿Lo más difícil del partido?','¿Cómo celebrarán?'],
+derrota:['¿Qué falló hoy?','¿Culpa del DT?','¿Cómo levantan el ánimo?','¿Presión de la afición?','¿Puedes mejorar?','¿Qué dices a los hinchas?','¿Faltó actitud?','¿Cómo afecta al equipo?'],
+gol:['¿Cómo describes ese gol?','¿Lo entrenaste?','¿A quién lo dedicas?','¿El mejor de tu carrera?'],
+rival:['¿Opinas de tu rival directo?','¿Tensión con alguien?','¿Cómo manejas la presión?']
+};
+
+let P=null,tab='semana',appOpen=null,phonePage=0;
+
+// ================= UTILIDADES =================
+const $=id=>document.getElementById(id);
+const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fm=n=>{if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M';if(n>=1e3)return'$'+(n/1e3).toFixed(n>=1e5?0:1)+'k';return'$'+Math.round(n)};
+function calcSkill(){if(!P)return 0;return Math.round((P.fisico+P.velocidad+P.tecnica+P.mentalA)/4);}
+function getMedia(){if(!P)return 0;let base=(P.skill+P.energia)/2;let forma=Math.max(0.9,1-(P.comidasMes||0)*0.01);return Math.round(base*forma);}
+function isTransferWindow(){return P&&(P.mes===0||P.mes===5);}
+function atractivoComercial(){let rend=P.skill*0.5;let seg=Math.min(50,(P.redes.seguidores||0)/2000);let estilo=Math.min(30,P.dripScore||0);let esc=(P.prensa?.crisis||0)*0.2+(P.stats?.rojas||0)*3;return Math.round(cl(rend+seg+estilo-esc,0,100));}
+function leagueOf(club){for(let L of LIGAS){if(L.clubs.includes(club))return{liga:L.liga,pais:L.pais,conf:L.conf,cal:L.cal,fac:L.fac};}
+return{liga:'Liga Local',pais:PAISES[P.pi].n,conf:'CONCACAF',cal:'Ene–Dic',fac:2};}
+function facMult(){let f=P.liga?P.liga.fac:2;return 0.5+f*0.1;}
+function offerTier(){let luck=ri(1,10)+(P.patrocinios?.length?1:0)+(P.agenteTipo==='profesional'?1:0);let s=P.skill;
+if(s<70)return luck>=9?'MEDIANO':'CHICO';
+if(s<80){if(luck>=9)return'GRANDE';if(luck<=3)return'CHICO';return'MEDIANO';}
+if(s<90)return luck<=2?'MEDIANO':'GRANDE';
+return'ELITE';}
+function dayKey(){return P.año*360+P.mes*30+P.dia;}
+function monthKey(){return P.año*12+P.mes;}
+function log(t,hi){if(!P)return;P.hist.unshift({t,d:P.dia,m:P.mes,y:P.año,hi:!!hi});if(P.hist.length>80)P.hist.pop();renderLog();}
+function renderLog(){const el=$('log-list');if(!el)return;el.innerHTML=P.hist.slice(0,40).map(h=>`<div class="${h.hi?'hi':''}">[${h.d}/${h.m+1}/${h.y}] ${h.t}</div>`).join('');}
+function updateRealTime(){let now=new Date();let h=String(now.getHours()).padStart(2,'0');let m=String(now.getMinutes()).padStart(2,'0');
+let t=$('phone-time');if(t)t.innerText=h+':'+m;}
+setInterval(updateRealTime,1000);
+async function updateBattery(){
+try{
+if('getBattery' in navigator){
+const batt=await navigator.getBattery();
+const update=()=>{let el=$('phone-batt');if(el)el.innerText='🔋 '+Math.round(batt.level*100)+'%';};
+update();batt.addEventListener('levelchange',update);
+}else{let lvl=100;setInterval(()=>{lvl=Math.max(5,lvl-0.1);let el=$('phone-batt');if(el)el.innerText='🔋 '+Math.round(lvl)+'%';},60000);}
+}catch(e){}}
+function rainMoney(){for(let i=0;i<15;i++){let r=document.createElement('div');r.className='rain';r.innerText='💰';r.style.left=Math.random()*100+'vw';r.style.top='-50px';document.body.appendChild(r);setTimeout(()=>r.remove(),2000);}}
+
+// ================= NAVEGACIÓN =================
+function go(s){document.querySelectorAll('#scr-start,#scr-create,#scr-game').forEach(e=>e.classList.add('hidden'));$('scr-'+s).classList.remove('hidden');
+$('phone-bar').classList.add('hidden');$('phone-toggle').classList.toggle('hidden',s!=='game');
+if(s==='game'){render();updateRealTime();updateBattery();}}
+function togglePhone(){$('phone-bar').classList.toggle('hidden');}
+function openApp(name){appOpen=name;$('app-view').classList.remove('hidden');$('app-title').innerText=appTitles[name]||name;renderApp();}
+function closeApp(){$('app-view').classList.add('hidden');appOpen=null;}
+const appTitles={whatsapp:'💬 WhatsApp',insta:'📸 Instagram',club:'⚽ Mi Club',bank:'🏦 Banco',press:'🎙️ Prensa',dating:'💘 Citas',gym:'🏋️ Entrenamiento',casino:'🎰 Casino',sel:'🏆 Selección',life:'🏠 Vida',med:'🏥 Médico',drip:'👟 Sneakers',museum:'🏛️ Museo',post:'👔 Post-Retiro',patro:'💰 Sponsors',neg:'💼 Negocios',fame:'🎬 Eventos',familia:'👪 Familia',yt:'▶️ YouTube',tiktok:'🎵 TikTok',kick:'🦵 Kick',trofeos:'🏆 Trofeos',tiendaAnticon:'💊 Salud'};
+
+// ================= CREACIÓN =================
+function initCreate(){let o='';PAISES.forEach((p,i)=>o+=`<option value="${i}">${p.f} ${p.n}</option>`);$('c-pais').innerHTML=o;}
+function newLife(){
+const pi=+$('c-pais').value,clase=$('c-clase').value==='r'?ri(0,2):+$('c-clase').value;
+P={nom:$('c-nom').value||'Mateo',ape:$('c-ape').value||'García',apo:$('c-apo').value||'La Joya',pi,pos:$('c-pos').value,dif:+$('c-dif').value,iron:$('c-iron').checked,
+clase,dia:1,mes:0,año:2026,edad:6,
+energia:100,salud:100,mental:85,felicidad:75,fama:0,rep:50,
+dinero:clase===2?5000:clase===1?800:50,ahorros:0,
+skill:0,fisico:ri(8,15),tecnica:ri(5,12),mentalA:ri(5,10),velocidad:ri(8,18),
+etapa:'barrio',equipo:null,contrato:null,liga:null,
+equipoJuvenil:null,ligaJuvenil:null,tablaJuvenil:null,copasJuveniles:[],
+seleccion:{cat:null,pj:0,g:0,titulos:[],novata:false,debut:false,pelea:false,debutGol:false,himno:false},
+staff:{trainer:false,physio:false,psico:false,agente:false},
+edu:{nivel:5,notas:5,grado:0,enEscuela:true,graduado:false,salio:false,futbolFull:false,cursos:{finanzas:0,marketing:0,idiomas:0,oratoria:0,derecho:0},carrera:null},
+rel:{estado:'soltero',pareja:null,satisf:0,casado:false,amantes:[]},
+embarazo:{activo:false,meses:0,madre:null},
+anticonceptivo:null,anticonceptivoDias:0,anticonceptivoEfic:0,
+redes:{seguidores:0,postHoy:false,viral:0,yt:0,tiktok:0,kick:0,upl:{},adm:{}},
+sneakers:[],dripScore:0,
+lesion:{activa:false,semanas:0,tipo:''},
+rivales:[],prensa:{rumor:null,crisis:0},
+stats:{pj:0,goles:0,asist:0,rojas:0},
+palmares:[],empresas:[],patrocinios:[],luxuries:[],
+retirado:false,edadRetiro:0,museo:false,
+clubPropio:null,
+postCareer:null,coachLevel:0,clubOwner:null,
+hist:[],totWeek:0,lastTransfer:0,worldCupYear:2030,
+prestamo:{activo:false,monto:0,cuotas:0},
+botinesOwned:[],pendingOffers:[],prestamoJugador:null,inversion:0,companeros:null,tabla:null,
+diasSinEntrenar:0,agenteTipo:null,
+comidasMes:0,
+formaComida:'equilibrada',
+familia:{mama:true,papa:Math.random()<0.7,hermano:Math.random()<0.5,tio:Math.random()<0.3,relMadre:80,relPadre:70,relHermano:75,relTio:60},
+bodas:[],hijos:[],hijosEsteAño:0,
+eventosFamaEsteAño:0,
+balonesOro:[],copasAmerica:[],eurocopas:[],copasOro:[],
+parejaOficial:false};
+P.skill=calcSkill();
+log('👶 Naciste en '+PAISES[pi].f+' '+PAISES[pi].n,1);
+go('game');render();}
+
+// ================= MOTOR DE TIEMPO =================
+function advance(days){for(let i=0;i<days;i++){if(!P)break;processDay();}render();}
+function processDay(){
+P.dia++;
+if(P.dia>30){P.dia=1;P.mes++;
+P.comidasMes=0;
+if(P.mes>11){P.mes=0;P.año++;P.edad++;yearEvents();}
+monthEvents();}
+P.totWeek+=1/7;
+if(P.embarazo.activo){
+P.embarazo.meses+=1/30;
+if(P.embarazo.meses>=9){
+showModal('🤰 ¡PARTO!','<p>'+(P.embarazo.madre||'Tu pareja')+' está dando a luz. Elige el nombre (sexo 50/50 lo da el sistema):</p><input id="baby-name" type="text" placeholder="Nombre del bebé" style="width:100%;padding:10px;margin:10px 0;background:#0d1526;border:1px solid #334155;color:#fff;border-radius:8px">',
+'<button class="grn" onclick="confirmBabyName()">✅ Confirmar</button>');
+}}
+if(P.anticonceptivoDias>0)P.anticonceptivoDias--;
+let regen=P.staff.physio?1.8:0.7;
+P.energia=cl(P.energia+regen,0,100);
+P.mental=cl(P.mental+(P.staff.psico?1.5:0.3),0,100);
+if(P.edu.enEscuela&&P.edad>=6&&P.edad<=17){P.edu.nivel=cl(P.edu.nivel+0.03,0,100);P.edu.grado=Math.min(12,P.edad-5);}
+if(P.edu.enEscuela&&P.edad>=18){P.edu.enEscuela=false;P.edu.graduado=true;log('🎓 ¡Terminaste la escuela! Universidad desbloqueada.',1);}
+if(P.staff.trainer&&!P.retirado){
+P.energia=cl(P.energia-3,0,100);P.diasSinEntrenar=0;
+let gain=(P.edad<18?0.12:P.edad<28?0.08:0.05)*facMult();
+if(P.edu.futbolFull)gain*=1.3;
+P.fisico=cl(P.fisico+gain,0,99);P.velocidad=cl(P.velocidad+gain*0.8,0,99);
+P.tecnica=cl(P.tecnica+gain*0.8,0,99);P.mentalA=cl(P.mentalA+gain*0.5,0,99);
+P.skill=calcSkill();}
+P.diasSinEntrenar=(P.diasSinEntrenar||0)+1;
+if(P.diasSinEntrenar>7&&!P.retirado){
+P.fisico=cl(P.fisico-0.08,20,99);P.velocidad=cl(P.velocidad-0.08,20,99);P.tecnica=cl(P.tecnica-0.05,20,99);P.skill=calcSkill();}
+if(P.edad>=30&&!P.retirado){P.fisico=cl(P.fisico-0.05,20,99);P.velocidad=cl(P.velocidad-0.06,20,99);P.tecnica=cl(P.tecnica-0.03,20,99);P.mentalA=cl(P.mentalA-0.02,20,99);P.skill=calcSkill();}
+if([1,8,15,22].includes(P.dia)&&P.equipo&&!P.retirado&&!P.lesion.activa){simulateMatch();}
+if([5,12,19,26].includes(P.dia)&&P.equipoJuvenil&&!P.retirado&&!P.lesion.activa){simulateMatchJuvenil();}
+if(P.lesion.activa){P.lesion.semanas-=1/7;if(P.lesion.semanas<=0){P.lesion.activa=false;log('✅ Recuperado',1);}}
+if(P.edad>32&&!P.retirado){P.velocidad=cl(P.velocidad-0.02,20,99);P.fisico=cl(P.fisico-0.01,20,99);P.skill=calcSkill();}
+if(P.edad>70&&Math.random()<0.001*P.edad){die('Causas naturales a los '+P.edad+' años.');return;}
+if(P.salud<=0){die('Tu salud colapsó.');return;}
+if([1,15].includes(P.dia)&&!P.retirado)checkSel();
+if(P.dia===15&&!P.retirado)checkScouting();
+if(Math.random()<0.008&&P.fama>20&&!P.retirado)genRumor();
+if(P.empresas.length){
+P.empresas.forEach(e=>{
+if(!e.catalogoActivo)return;
+let famaEmp=(P.fama||0)+(e.nivel||1)*5;
+let envios=Math.round((famaEmp/10)*((e.sucursales?.length||0)+1));
+let venta=envios*(e.precio||50);
+P.dinero+=venta;
+});}
+if(P.clubPropio)simularClubPropio();
+if(Math.random()<0.02)eventoFamilia();
+}
+function yearEvents(){
+log('🎂 ¡Cumples '+P.edad+' años!',1);
+P.hijosEsteAño=0;P.eventosFamaEsteAño=0;
+if(!P.retirado&&P.edad>=42){forceRetire('Tu cuerpo no da más.');}
+if(!P.retirado&&P.edad>=38&&P.skill<60){forceRetire('Ningún club te renueva.');}
+if(P.año===P.worldCupYear){worldCupEvent();}
+if(!P.retirado&&P.equipo){balonOroEvent();}
+if((P.año%4)===2&&!P.retirado){copaContinentalEvent();}
+if((P.año%4)===1&&!P.retirado){copaOroEvent();}
+if(!P.retirado&&P.equipoJuvenil&&P.edad<20){copaJuvenilEvent();}
+let tax=Math.round(P.dinero*0.12+P.ahorros*0.03);
+if(tax>0){P.dinero-=tax;log('🏛️ Impuestos: -'+fm(tax));}
+}
+function balonOroEvent(){
+let chance=cl(P.skill/130+P.fama/200+(P.stats.goles||0)/50,0,0.8);
+if(Math.random()<chance&&P.stats.goles>10){
+P.balonesOro.push(P.año);P.fama=cl(P.fama+15,0,100);P.dinero+=200000;
+log('🏆 ¡¡BALÓN DE ORO '+P.año+'!! +$200k',1);
+showModal('🏆 BALÓN DE ORO','<p>¡'+P.nom+' '+P.apo+' es el mejor del mundo!</p>');
+rainMoney();
+}else if(P.skill>80){log('🎖️ Nominado al Balón de Oro.');}
+}
+function copaContinentalEvent(){
+if(!P.seleccion.cat||P.seleccion.cat==='Sub-17')return;
+if(P.skill<65){log('📺 No convocado.');return;}
+let esEuro=['España','Inglaterra','Alemania','Francia','Italia','Portugal','Países Bajos'].includes(PAISES[P.pi].n);
+let nombre=esEuro?'🏆 EURO '+P.año:'🏆 Copa América '+P.año;
+let rounds=0;
+for(let i=0;i<6;i++){if(Math.random()<cl(P.skill/120+PAISES[P.pi].str/300,0.2,0.8))rounds++;else break;}
+if(rounds>=6){
+if(esEuro){P.eurocopas.push(P.año);P.palmares.push('🏆 Euro '+P.año);}
+else{P.copasAmerica.push(P.año);P.palmares.push('🏆 Copa América '+P.año);}
+P.fama=cl(P.fama+20,0,100);P.dinero+=300000;
+log('🏆 ¡'+nombre+' CAMPEÓN!',1);rainMoney();
+}else if(rounds>=4){P.fama+=10;log('🥈 Semifinal '+nombre);}
+else log(nombre+': ronda '+rounds);}
+function copaOroEvent(){
+if(!P.seleccion.cat)return;
+let concacaf=['Panamá','México','EEUU','Costa Rica','Honduras','Guatemala','El Salvador'];
+if(!concacaf.includes(PAISES[P.pi].n))return;
+if(P.skill<55){log('📺 No a Copa Oro');return;}
+let rounds=0;
+for(let i=0;i<5;i++){if(Math.random()<cl(P.skill/120+PAISES[P.pi].str/300,0.2,0.8))rounds++;else break;}
+if(rounds>=5){P.copasOro.push(P.año);P.palmares.push('🏆 Copa Oro '+P.año);P.fama=cl(P.fama+15,0,100);P.dinero+=150000;
+log('🏆 ¡Copa Oro '+P.año+' CAMPEÓN!',1);rainMoney();}
+else log('🏆 Copa Oro: ronda '+rounds);
+}
+function copaJuvenilEvent(){
+if(!P.equipoJuvenil||!P.tablaJuvenil)return;
+let pos=P.tablaJuvenil.findIndex(t=>t.n===P.equipoJuvenil)+1;
+if(pos<=3){
+let copaNombre='🏆 Copa Juvenil '+P.año;
+P.copasJuveniles.push({año:P.año,pos:pos,nombre:copaNombre});
+P.palmares.push(copaNombre);
+let premio=pos===1?5000:pos===2?2000:1000;
+P.dinero+=premio;
+log('🏆 ¡Copa Juvenil '+P.año+'! Pos: '+pos+'º',1);
+}else{log('🏆 Copa Juvenil: no clasificaste');}
+}
+function monthEvents(){
+if(P.contrato&&!P.retirado){
+P.dinero+=P.contrato.salario;log('💰 Salario: +'+fm(P.contrato.salario));
+P.contrato.meses--;
+if(P.contrato.meses===6)checkContractRenewal();
+if(P.contrato.meses<=0){P.equipo=null;P.contrato=null;P.liga=null;P.companeros=null;P.tabla=null;log('🆓 Agente Libre',1);}
+}
+if(P.prestamoJugador){P.prestamoJugador.meses--;
+if(P.prestamoJugador.meses<=0){P.equipo=P.prestamoJugador.origen;P.liga=leagueOf(P.equipo);log('🔙 Fin préstamo',1);P.prestamoJugador=null;}}
+if(P.retirado&&P.postCareer==='dd'){P.dinero+=4000;}
+if(P.retirado&&P.postCareer==='emb'){P.dinero+=3000;}
+P.empresas.forEach(e=>{
+let nivelJugador=1+P.skill/100;
+let sucursales=(e.sucursales||[]).length+1;
+let base=e.inv*0.002*nivelJugador*sucursales*(e.nivel||1);
+let g=Math.round(base*ri(1,4));
+P.dinero+=g;
+});
+P.patrocinios.forEach(name=>{let b=BRANDS.find(x=>x.n===name);if(b){let pago=Math.round(b.pay*(1+P.skill/100));P.dinero+=pago;log('💵 '+b.n+': +'+fm(pago));}});
+if(P.redes.seguidores>10000){let inc=Math.round(P.redes.seguidores*0.01);P.dinero+=inc;}
+if((P.inversion||0)>0){let g=Math.round(P.inversion*0.005);P.inversion+=g;}
+if(P.luxuries&&P.luxuries.length){let m=P.luxuries.reduce((s,l)=>s+l.mant,0);P.dinero-=m;log('🧾 Mantenim.: -'+fm(m));}
+if(P.liga&&P.skill>70&&P.liga.fac>=3&&Math.random()<0.3)continentalCup();
+if(P.prestamo.activo){P.dinero-=P.prestamo.cuotas;P.prestamo.monto-=P.prestamo.cuotas;if(P.prestamo.monto<=0){P.prestamo.activo=false;log('✅ Préstamo pagado');}}
+if(P.museo){let inc=ri(500,2000)*Math.max(1,P.palmares.length);P.dinero+=inc;}
+}
+function continentalCup(){
+let cup=P.liga.conf==='UEFA'?'Champions':P.liga.conf==='CONMEBOL'?'Libertadores':'Concachampions';
+if(Math.random()<0.5){P.fama=cl(P.fama+5,0,100);P.dinero+=20000;log('🌍 '+cup+': Victoria +$20k',1);}
+else log('🌍 '+cup+': eliminación');}
+function eventoFamilia(){
+let events=[
+{t:'👩 Mamá te llama preocupada',ef:()=>{P.mental=cl(P.mental+3,0,100);P.familia.relMadre=cl(P.familia.relMadre+2,0,100);}},
+{t:'👨 Papá pide $1000',ef:()=>{if(P.dinero>1000)showModal('👨 Papá','<p>Préstame $1k</p>','<button onclick="darPapa(true)">Darle</button><button onclick="darPapa(false)">No</button>');}},
+{t:'👦 Hermano quiere entradas',ef:()=>{P.familia.relHermano=cl(P.familia.relHermano+3,0,100);P.felicidad=cl(P.felicidad+2,0,100);}},
+{t:'👴 Tío con negocio',ef:()=>{P.familia.relTio=cl(P.familia.relTio-5,0,100);}}
+];
+let e=pick(events);log(e.t);e.ef();}
+function darPapa(dar){
+if(dar){P.dinero-=1000;P.familia.relPadre=cl(P.familia.relPadre+10,0,100);log('👨 Le diste $1k');}
+else{P.familia.relPadre=cl(P.familia.relPadre-10,0,100);log('👨 Te negaste');}
+closeModal();render();}
+function confirmBabyName(){
+let nom=$('baby-name').value||pick(['Santiago','Valentina','Matías','Emma','Lucas','Isabella','Benjamín','Mía']);
+let sexo=Math.random()<0.5?'👦':'';
+P.hijos.push({n:nom,sexo:sexo,madre:P.embarazo.madre||'pareja',edad:0});
+P.hijosEsteAño=(P.hijosEsteAño||0)+1;
+P.embarazo.activo=false;P.embarazo.meses=0;P.embarazo.madre=null;
+log('👶 ¡Nació '+nom+' '+sexo+'!',1);
+rainMoney();closeModal();render();
+}
+
+// ================= PARTIDOS JUVENILES =================
+function simulateMatchJuvenil(){
+if(P.energia<15){log('😴 Cansado (juvenil)');return;}
+P.energia=cl(P.energia-10,0,100);
+let winCh=cl(P.skill/120+P.fisico/300,0.2,0.75);
+let won=Math.random()<winCh;
+let goles=0;
+if(won){P.felicidad=cl(P.felicidad+3,0,100);
+if(['DC','ED','EI','MCO'].includes(P.pos)&&Math.random()<P.skill/100){goles=ri(1,2);}}
+if(P.tablaJuvenil){
+let myIdx=P.tablaJuvenil.findIndex(t=>t.n===P.equipoJuvenil);
+if(myIdx>=0){
+P.tablaJuvenil[myIdx].pj++;
+if(won){P.tablaJuvenil[myIdx].pts+=3;P.tablaJuvenil[myIdx].gf+=goles||1;}
+else P.tablaJuvenil[myIdx].gc++;
+}
+for(let i=0;i<P.tablaJuvenil.length;i++){
+if(i===myIdx)continue;
+P.tablaJuvenil[i].pj++;
+let r=Math.random();
+if(r<0.4){P.tablaJuvenil[i].pts+=3;P.tablaJuvenil[i].gf+=ri(1,3);}
+else if(r<0.7){P.tablaJuvenil[i].pts+=1;P.tablaJuvenil[i].gf+=ri(0,2);}
+else P.tablaJuvenil[i].gc+=ri(1,3);
+}}
+log(`⚽ Juvenil: ${won?'✅':'❌'}${goles?' 🥅'+goles:''}`);
+}
+
+// ================= SCOUTING =================
+function scoutTargets(){
+let region=PAISES[P.pi].n;
+let central=['Panamá','Costa Rica','Honduras','Guatemala','El Salvador'];
+let south=['Argentina','Brasil','Uruguay','Colombia','Ecuador','Paraguay','Perú','Chile','Venezuela','Bolivia'];
+if(central.includes(region))return['Inter Miami','LAFC','LA Galaxy','América','Tigres UANL'];
+if(south.includes(region))return['Real Madrid','Barcelona','Ajax','Flamengo','River Plate','Inter Miami'];
+return['Real Madrid','Barcelona','Man City','PSG','Inter Miami'];}
+function checkScouting(){
+if(!P.equipo||P.retirado||P.skill<40)return;
+let home=PAISES[P.pi].n;
+if(P.liga&&P.liga.pais!==home)return;
+if(Math.random()<0.06){
+let club=pick(scoutTargets());
+showModal('✈️ Interés Internacional',`<p>${club} de ${leagueOf(club).pais} te manda en avión.</p>`,
+`<button class="grn" onclick="acceptScout('${club}')">✈️ Ir</button><button onclick="closeModal()">Quedarme</button>`);
+}}
+function acceptScout(club){
+P.equipo=club;P.liga=leagueOf(club);P.lastTransfer=P.totWeek;
+let sal=Math.round(P.skill*ri(150,400));
+P.contrato={salario:sal,meses:ri(24,48),inicio:P.año};
+P.companeros=genCompaneros(30);P.tabla=genTabla(club);
+log('✈️ Fichaste por '+club,1);closeModal();render();}
+
+// ================= CONTRATOS =================
+function checkContractRenewal(){
+if(!P.contrato||!P.equipo)return;
+let negBtn=P.agenteTipo?`<button onclick="counterRenewal()">📈 Contraofertar</button>`:`<p class="dim">Sin agente: solo sí/no</p>`;
+showModal('📄 Renovación','<p>Termina en 6 meses</p>',
+`<button class="grn" onclick="renew()">✍️ Renovar (+20%)</button>${negBtn}<button class="red" onclick="closeModal()">Rechazar</button>`);}
+function renew(){let newSal=Math.round(P.contrato.salario*1.2);P.contrato={salario:newSal,meses:ri(24,48),inicio:P.año};log('✍️ Renovado: '+fm(newSal),1);closeModal();render();}
+function counterRenewal(){let newSal=Math.round(P.contrato.salario*(1.4+Math.random()*0.3));P.contrato={salario:newSal,meses:ri(24,48),inicio:P.año};log('📈 Agente: '+fm(newSal),1);closeModal();render();}
+function requestTransfer(){
+if(!P.equipo)return showModal('❌','Sin club');
+if(!isTransferWindow())return showModal('🔒 Mercado Cerrado','Solo ENERO/JUNIO');
+let prob=computeTransferAccept();
+if(Math.random()<prob){log('✅ Club aceptó',1);generateOffers();}
+else showModal('❌ Rechazado','<p>DT rechazó</p>',
+`<button onclick="closeModal();log('🤝 Acepté')">Aceptar</button><button class="red" onclick="rebellion()">😤 Rebeldía</button>`);}
+function computeTransferAccept(){
+let prob=0.4;
+if(P.contrato){if(P.contrato.meses<=12)prob+=0.3;else if(P.contrato.meses>=36)prob-=0.2;}
+if(P.rep<40)prob+=0.15;else if(P.rep>70)prob-=0.15;
+return cl(prob,0.1,0.9);}
+function rebellion(){P.rep=cl(P.rep-30,0,100);P.fama=cl(P.fama+5,0,100);log('😤 Rebeldía',1);closeModal();generateOffers();}
+function generateOffers(){
+let tier=offerTier();let pool=CLUB_TIERS[tier];
+let n=ri(1,3);P.pendingOffers=[];
+for(let i=0;i<n;i++){let c=pick(pool);
+let mult=tier==='ELITE'?3:tier==='GRANDE'?2:tier==='MEDIANO'?1.2:0.7;
+let sal=Math.round(P.skill*ri(100,300)*mult*(1+P.fama/100));
+if(P.agenteTipo==='profesional')sal=Math.round(sal*1.15);
+P.pendingOffers.push({club:c,sal,anos:ri(2,5)});}
+if(P.skill>=80&&Math.random()<0.5)P.pendingOffers.push({club:pick(['Al-Nassr','Al-Hilal','Al-Ittihad']),sal:Math.round(P.skill*ri(500,1000)),anos:ri(2,4),arabia:true});
+log('📩 Ofertas '+tier,1);showOfferModal();}
+function showOfferModal(){
+if(!P.pendingOffers||!P.pendingOffers.length){closeModal();render();return;}
+let o=P.pendingOffers[0];
+let arab=o.arabia?'<p class="gold">🇸 Arabia x5-x10</p>':'';
+let negBtn=P.agenteTipo?`<button onclick="negotiateOffer()">📈 Negociar</button>`:`<p class="dim"> Sin agente: solo sí/no</p>`;
+showModal('📩 OFERTA',`<h3>${o.club}</h3><p>🏟️ ${leagueOf(o.club).liga}</p><p>💰 ${fm(o.sal)}/mes · ${o.anos} años</p>${arab}`,
+`<button class="grn" onclick="acceptOffer()">✅ ACEPTAR</button>${negBtn}<button class="red" onclick="rejectOffer()">❌</button>`);}
+function acceptOffer(){
+let o=P.pendingOffers.shift();
+P.equipo=o.club;P.liga=leagueOf(o.club);P.contrato={salario:o.sal,meses:o.anos*12,inicio:P.año};P.lastTransfer=P.totWeek;
+P.companeros=genCompaneros(30);P.tabla=genTabla(o.club);
+log('✍️ '+o.club+' '+fm(o.sal),1);closeModal();
+if(P.pendingOffers.length)showOfferModal();else render();}
+function negotiateOffer(){
+let o=P.pendingOffers[0];
+let chance=0.5+(P.edu.cursos.derecho>0?0.25:0);
+if(Math.random()<chance){o.sal=Math.round(o.sal*1.3);log('📈 Mejoraste');showOfferModal();}
+else{log('❌ No mejoró');P.pendingOffers.shift();closeModal();if(P.pendingOffers.length)showOfferModal();else render();}}
+function rejectOffer(){P.pendingOffers.shift();closeModal();if(P.pendingOffers.length)showOfferModal();else render();}
+function requestLoan(){
+if(!P.equipo)return showModal('❌','Sin club');
+if(!isTransferWindow())return showModal('🔒 Cerrado','');
+if(P.skill>=80)return showModal('❌','Estelar, no ceden');
+let dest=pick(['Filial A','Filial B','Club B','Préstamo FC']);
+showModal('🔄 Préstamo',`<p>Cedido a <b>${dest}</b> 12m</p>`,
+`<button class="grn" onclick="confirmLoan('${dest}')">Aceptar</button><button onclick="closeModal()">No</button>`);}
+function confirmLoan(dest){P.prestamoJugador={origen:P.equipo,destino:dest,meses:12};P.equipo=dest;P.liga=leagueOf(dest);P.tabla=genTabla(dest);log('🔄 Cedido a '+dest,1);closeModal();render();}
+function findTeam(){
+if(P.lesion.activa)return showModal('❌','Lesionado');
+if(P.equipo&&!isTransferWindow())return showModal('🔒 Cerrado','');
+if(P.equipo&&P.totWeek-P.lastTransfer<52)return showModal('⏳','Espera 1 año');
+let minSkill=P.edad<15?15:P.edad<17?30:P.edad<20?45:55;
+if(P.skill<minSkill)return showModal('❌','Skill ≥'+minSkill);
+let t,lig;
+if(P.edad<20){
+let local=LIGAS.find(L=>L.pais===PAISES[P.pi].n);
+if(local){t=pick(local.clubs);lig=local;}
+else{t=pick(CLUB_TIERS.CHICO);lig=leagueOf(t);}
+}else{
+let tier=offerTier();t=pick(CLUB_TIERS[tier]);lig=leagueOf(t);
+}
+P.equipo=t;P.liga=lig;P.lastTransfer=P.totWeek;
+P.companeros=genCompaneros(30);P.tabla=genTabla(t);
+let sal=P.edad<17?ri(100,500):P.edad<20?ri(800,3000):ri(3000,20000)*(1+P.skill/50);
+let años=ri(1,4);
+P.contrato={salario:sal,meses:años*12,inicio:P.año};
+if(P.edad<20){
+P.equipoJuvenil=t+' Sub-20';
+P.ligaJuvenil='Liga Juvenil '+lig.conf;
+P.tablaJuvenil=genTablaJuvenil(t);
+log('⚽ Juveniles: '+P.equipoJuvenil,1);
+}
+log('✍️ '+t+' ('+lig.liga+') '+fm(sal),1);render();}
+function chooseAgent(t){P.agenteTipo=t;log('🕵️ Agente: '+t,1);render();}
+function genTablaJuvenil(clubPrincipal){
+let teams=[];
+let names=[clubPrincipal+' Sub-20','Academia Norte','Juvenil Sur','Cantera Real','Sub-20 Unión','Reserva FC','Juvenil Racing','Cantera Olimpia','Sub-20 Peñarol','Reserva River','Juvenil Dep','Sub-20 Local'];
+for(let i=0;i<12;i++){
+teams.push({n:names[i]||'Juvenil '+(i+1),pts:0,pj:0,gf:0,gc:0,skill:ri(30,75)});
+}
+return teams;
+}
+
+// ================= EQUIPO =================
+function getEtapa(){
+if(P.retirado)return'👴 Retirado';
+if(P.edad<10)return'👶 Baby';
+if(P.edad<13)return'⚽ Infantil';
+if(P.edad<15)return'🔵 Sub-13/15';
+if(P.edad<17)return'🟠 Sub-17';
+if(P.edad<20)return'🟢 Sub-20';
+if(P.edad<24)return'🟡 Joven';
+return'⭐ Pro';}
+function genCompaneros(n){let arr=[];for(let i=0;i<n;i++){let sk=ri(35,88),en=ri(50,100);arr.push({nom:pick(NOMBRES)+' '+pick(APELLIDOS),pos:pick(['POR','DFC','LD','LI','MCD','MC','MCO','ED','EI','DC']),skill:sk,energia:en,media:Math.round((sk+en)/2),edad:ri(17,35)});}return arr.sort((a,b)=>b.media-a.media);}
+function genTabla(myTeam){let teams=[];let names=[myTeam,'Atlético N','Dep Sur','Real C','Unión E','FC O','Racing','Nacional','Indep','Sportivo','Olimpia','River L'];for(let i=0;i<12;i++){teams.push({n:names[i],pts:0,pj:0,gf:0,gc:0,skill:ri(40,85)});}return teams;}
+function simulateMatch(){
+if(P.energia<15){log('😴 Cansado');return;}
+P.energia=cl(P.energia-12,0,100);
+P.fisico=cl(P.fisico-ri(1,3),20,99);P.skill=calcSkill();
+let winCh=cl(P.skill/130+P.fisico/300+P.mental/400,0.15,0.85);
+let won=Math.random()<winCh;
+let goles=0,asist=0;
+if(won){P.felicidad=cl(P.felicidad+4,0,100);P.fama=cl(P.fama+0.5,0,100);P.rep=cl(P.rep+1,0,100);
+if(['DC','ED','EI','MCO'].includes(P.pos)&&Math.random()<P.skill/120){goles=ri(1,2);P.stats.goles+=goles;}
+if(Math.random()<0.28){asist=1;P.stats.asist++;}}
+else{P.felicidad=cl(P.felicidad-3,0,100);P.mental=cl(P.mental-2,0,100);}
+P.stats.pj++;
+if(P.seleccion.cat==='Sub-20'){
+if(!P.seleccion.novata&&Math.random()<0.5){P.seleccion.novata=true;log('🎤 Novata: cantaste',1);}
+if(!P.seleccion.debut&&P.stats.pj%5===0){P.seleccion.debut=true;log('⚽ Debut Sub-20',1);}}
+if(P.rivales.length&&Math.random()<0.2){
+let r=pick(P.rivales);
+if(won){log('🔥 Ganaste a '+r,1);P.mental=cl(P.mental+8,0,100);P.fama=cl(P.fama+2,0,100);}
+else{log('😤 '+r+' provocó');if(Math.random()<0.3){P.stats.rojas++;log('🟥 Roja');}}}
+else if(Math.random()<0.1){P.rivales.push(pick(['El Carnicero','El Muro','La Bestia','Rompehuesos']));log('⚔️ Rival',1);}
+let injCh=0.03+(P.edad>30?0.04:0)+(P.energia<30?0.05:0);
+if(Math.random()<injCh){let sem=ri(2,8);P.lesion={activa:true,semanas:sem,tipo:pick(['Rotura','Esguince','Sobrecarga','Fractura'])};log('🤕 '+P.lesion.tipo+' '+sem+' sem',1);}
+let pos=1;
+if(P.tabla){let myIdx=P.tabla.findIndex(t=>t.n===P.equipo);if(myIdx<0)myIdx=0;
+P.tabla[myIdx].pj++;if(won){P.tabla[myIdx].pts+=3;P.tabla[myIdx].gf+=goles||1;}else P.tabla[myIdx].gc++;
+for(let i=0;i<P.tabla.length;i++){if(i===myIdx)continue;P.tabla[i].pj++;let r=Math.random();
+if(r<0.4){P.tabla[i].pts+=3;P.tabla[i].gf+=ri(1,3);}
+else if(r<0.7){P.tabla[i].pts+=1;P.tabla[i].gf+=ri(0,2);}
+else{P.tabla[i].gc+=ri(1,3);}}
+let sorted=[...P.tabla].sort((a,b)=>b.pts-a.pts);pos=sorted.findIndex(t=>t.n===P.equipo)+1;}
+log(`⚽ J${P.stats.pj}: ${won?'✅':'❌'}${goles?' 🥅'+goles:''}${asist?' 🎯':''} | Pos ${pos}º`);
+if(P.fama>10&&Math.random()<0.6)entrevistaPostPartido(won,goles,asist);
+else if(P.fama>10&&Math.random()<0.4)genPressEvent(won);
+}
+function entrevistaPostPartido(won,goles,asist){
+let preguntas=[];
+if(won)preguntas=preguntas.concat(PREGUNTAS_PRENSA.victoria);
+else preguntas=preguntas.concat(PREGUNTAS_PRENSA.derrota);
+if(goles>0)preguntas=preguntas.concat(PREGUNTAS_PRENSA.gol);
+if(P.rivales.length)preguntas=preguntas.concat(PREGUNTAS_PRENSA.rival);
+let pregunta=pick(preguntas);
+let opciones=[
+{text:'😊 Humilde',ef:()=>{P.rep=cl(P.rep+3,0,100);P.fama=cl(P.fama+0.5,0,100);log('🎤 Humilde: +Rep');}},
+{text:'😎 Protagonista',ef:()=>{P.fama=cl(P.fama+3,0,100);P.rep=cl(P.rep-2,0,100);log('🎤 Protagonista: +Fama');}},
+{text:'😤 Polémico',ef:()=>{if(Math.random()<0.5){P.fama=cl(P.fama+5,0,100);log('🎤 Polémica viral',1);}else{P.rep=cl(P.rep-5,0,100);log('🎤 Mala imagen -Rep');}}}
+];
+let html=`<p><b>"${pregunta}"</b></p><p class="dim">El periodista te apunta...</p>`;
+let btns=opciones.map((o,i)=>`<button onclick="responderEntrevista(${i})">${o.text}</button>`).join('');
+showModal('🎤 ENTREVISTA',html,btns);
+P._entrevistaOpciones=opciones;
+}
+function responderEntrevista(idx){
+if(P._entrevistaOpciones&&P._entrevistaOpciones[idx]){P._entrevistaOpciones[idx].ef();}
+closeModal();render();
+}
+function checkSel(){
+if(!P.equipo||P.retirado||P.lesion.activa)return;
+let cat=P.edad<17?'Sub-17':P.edad<20?'Sub-20':P.edad<23?'Sub-23':'Absoluta';
+let thresh=P.edad<20?40:P.edad<23?55:70;
+if(P.skill>thresh&&Math.random()<0.04){
+P.seleccion.cat=cat;P.seleccion.pj++;
+let gol=Math.random()<0.3;
+if(gol){P.seleccion.g++;P.stats.goles++;}
+P.fama=cl(P.fama+3,0,100);P.dinero+=2000;
+if(cat==='Sub-20'&&!P.seleccion.himno){P.seleccion.himno=true;
+showModal('🎵 Himno','<p>¿Cómo cantas?</p>',
+`<button class="grn" onclick="himno('apa')">😤 Apasionado</button><button onclick="himno('tim')">😐 Tímido</button><button class="red" onclick="himno('olv')">😱 Olvido</button>`);return;}
+log('🇺 '+cat+(gol?' +gol':''),1);}}
+function himno(t){
+if(t==='apa'){P.mental=cl(P.mental+10,0,100);P.fama+=2;log('🎵 +Moral',1);}
+if(t==='tim')log('🎵 Tímido');
+if(t==='olv'){P.rep=cl(P.rep-5,0,100);log('🎵 Olvidaste',1);}
+closeModal();render();}
+function worldCupEvent(){
+if(!P.seleccion.cat||P.seleccion.cat==='Sub-17')return;
+if(P.skill<70){log('📺 No al Mundial');return;}
+let rounds=0;
+for(let i=0;i<7;i++){if(Math.random()<cl(P.skill/120+PAISES[P.pi].str/300,0.2,0.8))rounds++;else break;}
+if(rounds>=7){P.palmares.push('🏆 Mundial '+P.año);P.fama=100;P.dinero+=500000;log('🏆 CAMPEÓN MUNDIAL',1);rainMoney();}
+else if(rounds>=4){P.palmares.push('🥈 Semifinal');P.fama=cl(P.fama+20,0,100);log('🥈 Semifinal');}
+else log('🌎 Ronda '+rounds);
+P.worldCupYear+=4;}
+function genRumor(){let rumors=['Fotos fiesta','Pelea','Tarde','Celebridad'];P.prensa.rumor=pick(rumors);P.prensa.crisis=ri(20,60);log('📰 '+P.prensa.rumor,1);}
+function genPressEvent(won){
+let orat=P.edu.cursos.oratoria>0?'+15%':'+0%';
+let q=won?['¿Victoria?','¿Afición?','¿Mundial?']:['¿Perdieron?','¿Problemas?','¿DT?'];
+showModal('🎙️ PRENSA',`<p>"${pick(q)}"</p><p class="dim">Oratoria: ${orat}</p>`,
+`<button class="grn" onclick="pressAns('h')">😊 85%</button><button class="gold" onclick="pressAns('a')">😎 50%</button><button class="red" onclick="pressAns('c')">😤 35%</button>`);}
+function pressAns(t){
+let orat=P.edu.cursos.oratoria>0?0.15:0;let roll=Math.random();
+if(t==='h'){if(roll<0.85+orat){P.rep=cl(P.rep+5,0,100);log('🎙️ +Rep');}else log('🎙️ Sin chispa');}
+if(t==='a'){if(roll<0.5+orat){P.fama=cl(P.fama+6,0,100);log('😎 Viral',1);}else{P.rep=cl(P.rep-8,0,100);log('😎 -Rep');}}
+if(t==='c'){if(roll<0.35+orat){P.fama+=3;P.rep+=2;log('😤 Respetado',1);}else{P.rep=cl(P.rep-10,0,100);P.dinero-=1000;log('😤 Multa');}}
+closeModal();render();}
+function handleRumor(action){if(!P.prensa.rumor)return;if(action==='live'){P.redes.seguidores+=ri(500,2000);P.fama+=3;log('🔴 Live');}if(action==='comunicado'){P.rep+=5;log('📄 Comunicado');}if(action==='demanda'){if(Math.random()<0.6){P.dinero+=5000;log('⚖️ Ganaste');}else{P.dinero-=2000;log('⚖️ Perdiste');}}if(action==='ignorar'){P.prensa.crisis+=10;P.mental-=5;log('🤫 Ignorado');}P.prensa.rumor=null;render();if(appOpen)renderApp();}
+function forceRetire(reason){P.retirado=true;P.edadRetiro=P.edad;P.equipo=null;P.contrato=null;P.liga=null;P.equipoJuvenil=null;P.tablaJuvenil=null;log('👴 '+reason,1);showModal('👴','<p>'+reason+'</p>');}
+function volRetire(){if(P.edad<30)return showModal('❌','Mín 30');showModal('👴','<p>¿Retirarte?</p>',`<button class="grn" onclick="doRetire()">Sí</button><button onclick="closeModal()">No</button>`);}
+function doRetire(){P.retirado=true;P.edadRetiro=P.edad;P.equipo=null;P.contrato=null;P.liga=null;closeModal();log('👋 Retirado a los '+P.edad,1);render();}
+function startPost(path){
+if(path==='dt'){P.postCareer='dt';P.coachLevel=1;log('👔 DT',1);}
+if(path==='dd'){P.postCareer='dd';log('🧠 Dir Dep',1);}
+if(path==='emb'){P.postCareer='emb';log('🌍 Embajador',1);}
+if(path==='owner'){if(P.dinero<50000)return showModal('❌','$50k');P.dinero-=50000;P.postCareer='owner';P.clubOwner='Mi Club FC';log('🏟️ Club',1);}
+if(path==='club_propio'){
+if(P.dinero<100000)return showModal('❌','Necesitas $100k');
+P.dinero-=100000;
+let nom=prompt('Nombre de tu club:','FC '+P.apo)||'FC '+P.apo;
+P.clubPropio={nombre:nom,division:3,juvenil:true,dt:null,jugadores:genCompaneros(18),juveniles:genCompaneros(15).map(j=>({...j,edad:ri(15,19)})),pts:0,pj:0,gf:0,gc:0,temporadas:0,presupuesto:0};
+P.postCareer='club_propio';
+log('🏟️ ¡Fundaste '+nom+'! 3ª División',1);rainMoney();
+}
+if(path==='tv'){P.postCareer='tv';log('🎙️ TV',1);}
+if(path==='museo'){if(P.dinero<20000)return showModal('❌','$20k');P.dinero-=20000;P.museo=true;log('🏛️ Museo',1);}
+render();if(appOpen)renderApp();}
+function coachMatch(){if(!P.postCareer||P.postCareer!=='dt')return;let win=Math.random()<0.5+P.coachLevel*0.05;P.dinero+=3000;P.coachLevel+=win?0.1:0;log(win?'✅ DT ganó':'❌ DT perdió');render();if(appOpen)renderApp();}
+function simularClubPropio(){
+if(!P.clubPropio)return;
+P.clubPropio.temporadas+=1/365;
+P.clubPropio.presupuesto+=1000;
+if(P.dia===7||P.dia===14||P.dia===21||P.dia===28){
+let fuerza=P.clubPropio.jugadores.reduce((s,j)=>s+j.media,0)/P.clubPropio.jugadores.length;
+let win=Math.random()<(fuerza/100)*0.6;
+if(win){P.clubPropio.pts+=3;P.clubPropio.gf+=ri(1,3);}
+else P.clubPropio.gc+=ri(0,2);
+P.clubPropio.pj++;
+}
+if(P.clubPropio.temporadas>=1&&P.clubPropio.pts>40&&P.clubPropio.division>1){
+P.clubPropio.division--;
+P.clubPropio.pts=0;P.clubPropio.pj=0;P.clubPropio.gf=0;P.clubPropio.gc=0;
+P.clubPropio.temporadas=0;
+log('📈 ¡'+P.clubPropio.nombre+' ASCENDIÓ a '+P.clubPropio.division+'ª!',1);
+P.palmares.push('📈 Ascenso '+P.año);rainMoney();
+}
+}
+
+// ================= RENDER =================
+function render(){
+if(!P)return;
+let stage=getEtapa();let win=isTransferWindow();
+let clubLine=P.equipo?`🏟️ ${P.equipo} · ${P.liga?P.liga.liga+' ('+P.liga.pais+')':''}`:'🆓 Sin equipo';
+let formaLabel=P.formaComida==='equilibrada'?'🥗 Equilibrada':P.formaComida==='rapida'?'🍔 Rápida':'🍎 Saludable';
+$('topbar').innerHTML=`
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+<b>${P.nom} "${P.apo}"</b>
+<span style="font-size:.8rem">🎂 ${P.edad} | 📅 ${P.dia} ${MESES[P.mes]} ${P.año}</span>
+</div>
+<div style="font-size:.72rem;margin-top:2px">${clubLine} · ${stage}</div>
+<div style="font-size:.72rem;margin-top:2px">🔔 ${win?'<span class="tag grn">ABIERTO</span>':'<span class="tag red">CERRADO</span>'} · 📊 Media: <b>${getMedia()}</b> · ${formaLabel} · 🍽️ ${P.comidasMes||0}/7 mes</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px">
+<div class="stat-row"><span>⚡ Energía</span><div class="bar-bg"><div class="bar-fill" style="width:${P.energia}%;background:${P.energia<30?'var(--red)':'var(--gold)'}"></div></div></div>
+<div class="stat-row"><span>❤️ Salud</span><div class="bar-bg"><div class="bar-fill" style="width:${P.salud}%;background:var(--red)"></div></div></div>
+<div class="stat-row"><span>🧠 Mental</span><div class="bar-bg"><div class="bar-fill" style="width:${P.mental}%;background:var(--pur)"></div></div></div>
+<div class="stat-row"><span>⭐ Fama</span><div class="bar-bg"><div class="bar-fill" style="width:${cl(P.fama,0,100)}%;background:var(--pink)"></div></div></div>
+</div>
+<div style="display:flex;justify-content:space-between;margin-top:8px;font-size:.8rem">
+<span>💰 ${fm(P.dinero)}</span><span>🏦 ${fm(P.ahorros)}</span>
+</div>
+<div style="display:flex;gap:4px;margin-top:8px">
+<button onclick="advance(1)" style="flex:1;font-size:.75rem">▶️ 1 Día</button>
+<button onclick="advance(7)" style="flex:1;font-size:.75rem">⏩ Sem</button>
+<button onclick="advance(30)" style="flex:1;font-size:.75rem">⏭️ Mes</button>
+<button onclick="advance(365)" style="flex:1;font-size:.75rem" class="gold">⏩ Año</button>
+</div>
+<div style="display:flex;gap:4px;margin-top:4px">
+<button class="prim" onclick="saveGame()" style="flex:1;font-size:.75rem">💾</button>
+<button class="red" onclick="backToMenu()" style="flex:1;font-size:.75rem">🏠</button>
+</div>`;
+let tabs=[['semana','📋'],['deporte','⚽'],['vida','🏠'],['tienda','🛒'],['carrera','🎓']];
+let html='<div class="tabs">'+tabs.map(t=>`<button class="${tab===t[0]?'on':''}" onclick="tab='${t[0]}';render()">${t[1]}</button>`).join('')+'</div>';
+if(tab==='semana')html+=renderSemana();
+if(tab==='deporte')html+=renderDeporte();
+if(tab==='vida')html+=renderVida();
+if(tab==='tienda')html+=renderTienda();
+if(tab==='carrera')html+=renderCarrera();
+$('main-area').innerHTML=html;
+renderPhoneGrid();}
+function renderSemana(){
+let h='<div class="card"><h3>📋 Semana — '+MESES[P.mes]+' '+P.año+'</h3>';
+h+=`<p class="dim">Energía: ${Math.round(P.energia)}/100 · Media: <b>${getMedia()}</b></p>`;
+if((P.comidasMes||0)>5)h+=`<div class="warn-box">🍽️ ${P.comidasMes}/7 comidas este mes. >5 baja skill.</div>`;
+if((P.diasSinEntrenar||0)>7)h+=`<div class="warn-box">🦥 ${P.diasSinEntrenar} días sin entrenar</div>`;
+if(P.edad>=30&&!P.retirado)h+=`<div class="warn-box">⚠️ DECLIVE 30+</div>`;
+if(P.lesion.activa)h+=`<p style="color:var(--red)">🤕 ${P.lesion.tipo} (${Math.ceil(P.lesion.semanas)} sem)</p>`;
+if(P.embarazo.activo)h+=`<div class="warn-box" style="background:#78350f">🤰 Embarazo: mes ${Math.floor(P.embarazo.meses)}/9 (${P.embarazo.madre})</div>`;
+h+=`<div class="grid2" style="margin-top:8px">
+<button onclick="doTrain()">🏋️ Entrenar (-15⚡)</button>
+<button onclick="doStudy()">📖 Estudiar</button>
+<button onclick="doParty()">🎉 Fiesta</button>
+<button onclick="openApp('life')">🏠 Vacaciones</button>
+</div>`;
+if(P.edad>=12&&P.edad<25){
+h+=`<h3 style="margin-top:10px">🎭 Actividades</h3><div class="grid2">`;
+ACTIVIDADES_JOVENES.forEach((a,i)=>{h+=`<button onclick="actividadJoven(${i})">${a.n} $${a.p}</button>`;});
+h+=`</div>`;}
+if(P.staff.trainer)h+=`<p class="grn">✅ Entrenador personal</p>`;
+else h+=`<button onclick="hireTrainer()" style="width:100%">🏋️ Entrenador ($500/mes)</button>`;
+h+=`<h3 style="margin-top:10px">🍽️ Forma de comer</h3>
+<div class="grid3">
+<button onclick="setForma('equilibrada')" ${P.formaComida==='equilibrada'?'disabled':''}>🥗 Equilibrada</button>
+<button onclick="setForma('rapida')" ${P.formaComida==='rapida'?'disabled':''}>🍔 Rápida</button>
+<button onclick="setForma('saludable')" ${P.formaComida==='saludable'?'disabled':''}>🍎 Saludable</button>
+</div>`;
+h+='</div>';return h;}
+function setForma(f){P.formaComida=f;log('🍽️ Forma: '+f);render();}
+function renderDeporte(){
+let h='<div class="card"><h3>⚽ Carrera — '+getEtapa()+'</h3>';
+h+=`<p>Skill: <b>${Math.round(P.skill)}</b> · 📊 Media: <b>${getMedia()}</b></p>`;
+h+=`<p class="dim">💪 Físico ${Math.round(P.fisico)} · ⚡ Vel ${Math.round(P.velocidad)} · 🎯 Téc ${Math.round(P.tecnica)} · 🧠 Mental ${Math.round(P.mentalA)}</p>`;
+if(P.liga)h+=`<p>🏟️ ${P.equipo} · ${P.liga.liga} (${P.liga.pais})</p>`;
+h+=`<p>PJ: ${P.stats.pj} | ⚽ ${P.stats.goles} | 🎯 ${P.stats.asist}</p>`;
+if(P.equipoJuvenil&&!P.retirado){
+h+=`<div class="club-card"><h3>⚽ JUVENILES — ${P.equipoJuvenil}</h3>
+<p class="dim">Liga: ${P.ligaJuvenil||'Juvenil'}</p>`;
+if(P.tablaJuvenil){
+let pos=P.tablaJuvenil.findIndex(t=>t.n===P.equipoJuvenil)+1;
+let myTeam=P.tablaJuvenil.find(t=>t.n===P.equipoJuvenil);
+h+=`<p>Pos: <b>#${pos}</b> | Pts: ${myTeam.pts} | PJ: ${myTeam.pj}</p>`;
+h+=`<table><tr><th>#</th><th>Equipo</th><th>Pts</th><th>PJ</th></tr>`;
+[...P.tablaJuvenil].sort((a,b)=>b.pts-a.pts).slice(0,6).forEach((t,i)=>{
+h+=`<tr ${t.n===P.equipoJuvenil?'style="background:#1e3a5f"':''}><td>${i+1}</td><td>${t.n}</td><td>${t.pts}</td><td>${t.pj}</td></tr>`;});
+h+='</table>';}
+if(P.copasJuveniles.length){h+=`<p style="margin-top:8px"><b>🏆 Copas:</b></p>`;P.copasJuveniles.forEach(c=>{h+=`<span class="tag gold">${c.nombre}</span>`;});}
+h+='</div>';}
+if(P.equipo){
+h+=`<button onclick="openApp('club')">👥 Club</button>`;
+if(P.edad>=30&&!P.retirado)h+=`<button class="red" onclick="volRetire()">👴 Retirarse</button>`;
+}else h+=`<button class="prim" onclick="findTeam()">🔍 Buscar</button>`;
+if(P.retirado)h+=`<button class="gold" onclick="openApp('post')">👔 Post</button>`;
+h+='</div>';
+if(!P.retirado&&P.edad<18&&!P.agenteTipo){
+h+=`<div class="card"><h3>🕵️ Agente</h3>
+<div class="grid2"><button onclick="chooseAgent('familiar')">👨👩 Familiar</button><button onclick="chooseAgent('profesional')">💼 Profesional</button></div></div>`;}
+h+=`<div class="card"><h3>🏆 Selección</h3><p>${P.seleccion.cat||'—'} | PJ: ${P.seleccion.pj}</p></div>`;
+h+=renderVitrinaTrofeos();
+return h;}
+function renderVitrinaTrofeos(){
+let tiene=P.balonesOro.length||P.copasAmerica.length||P.eurocopas.length||P.copasOro.length||P.copasJuveniles.length||P.palmares.length;
+if(!tiene)return`<div class="card"><h3>🏆 Vitrina de Trofeos</h3><p class="dim">Aún sin trofeos.</p></div>`;
+let h='<div class="card trophy-shelf"><h3>🏆 VITRINA</h3>';
+if(P.balonesOro.length){h+='<p><b>⚽ Balón de Oro:</b></p><div>';P.balonesOro.forEach(a=>{h+=`<span class="trophy-item">🏆 ${a}</span>`;});h+='</div>';}
+if(P.copasAmerica.length){h+='<p><b>🌎 Copa América:</b></p><div>';P.copasAmerica.forEach(a=>{h+=`<span class="trophy-item">🏆 ${a}</span>`;});h+='</div>';}
+if(P.eurocopas.length){h+='<p><b>🇪🇺 Eurocopa:</b></p><div>';P.eurocopas.forEach(a=>{h+=`<span class="trophy-item">🏆 ${a}</span>`;});h+='</div>';}
+if(P.copasOro.length){h+='<p><b>🏆 Copa Oro:</b></p><div>';P.copasOro.forEach(a=>{h+=`<span class="trophy-item">🏆 ${a}</span>`;});h+='</div>';}
+if(P.copasJuveniles.length){h+='<p><b>👦 Juveniles:</b></p><div>';P.copasJuveniles.forEach(c=>{h+=`<span class="trophy-item silver">🏆 ${c.nombre}</span>`;});h+='</div>';}
+if(P.palmares.length){h+='<p><b>🏅 Otros:</b></p><div>';P.palmares.forEach(p=>{h+=`<span class="trophy-item bronze">${p}</span>`;});h+='</div>';}
+h+='</div>';return h;}
+function renderVida(){
+let h='<div class="card"><h3>🏠 Vida</h3>';
+if(P.rel.pareja)h+=`<p>💘 ${P.rel.casado?'💍 Casado':'Pareja'}: <b>${P.rel.pareja}</b> · ${P.rel.satisf}%</p>`;
+else h+=`<p>💘 Soltero</p>`;
+if(P.rel.amantes&&P.rel.amantes.length)h+=`<p class="red">💋 Amantes: ${P.rel.amantes.map(a=>a.n).join(', ')}</p>`;
+if(P.hijos.length)h+=`<p>👶 Hijos: ${P.hijos.map(x=>x.n+' '+x.sexo).join(', ')}</p>`;
+if(P.embarazo.activo)h+=`<p style="color:var(--gold)">🤰 Embarazo: mes ${Math.floor(P.embarazo.meses)}/9</p>`;
+h+=`<div class="grid2"><button onclick="openApp('familia')">👪 Familia</button><button onclick="openApp('dating')">💘 Citas</button></div></div>`;
+if(P.luxuries&&P.luxuries.length)h+=`<div class="card"><h3>🛥️ Lujos</h3>${P.luxuries.map(l=>`<span class="tag gold">${l.n}</span>`).join('')}</div>`;
+h+='<div class="card"><h3>✈️ Vacaciones (elige destino)</h3><div class="grid2">';
+VACACIONES.forEach((v,i)=>{h+='<button onclick="vacacionDestino('+i+')">'+v.n+'<br><span class="dim">'+fm(v.p)+'</span></button>';});
+h+='</div></div>';
+return h;}
+function renderTienda(){
+let h='<div class="card"><h3>🛒 Tienda</h3>';
+h+=`<p class="dim">🍽️ ${P.comidasMes||0}/7 este MES</p>`;
+h+=`<h3 style="margin-top:10px">🍽️ Comida</h3><div class="grid2">`;
+FOODS.forEach((f,i)=>{let max=(P.comidasMes||0)>=7;h+=`<button onclick="eatFood(${i})" ${max?'disabled':''}>${f.icon} ${f.n} $${f.p}</button>`;});
+h+=`</div><h3 style="margin-top:12px">🥾 Botines</h3><div class="grid2">`;
+BOTINES.forEach((b,i)=>{let owned=(P.botinesOwned||[]).includes(i);h+=`<button onclick="buyBotines(${i})" ${owned?'disabled':''}>${b.icon} ${b.n} $${b.p}</button>`;});
+h+=`</div><h3 style="margin-top:12px">🛥️ Lujos</h3><div class="grid2">`;
+LUJOS.forEach((l,i)=>{let owned=(P.luxuries||[]).find(x=>x.n===l.n);h+=`<button onclick="buyLujo(${i})" ${owned?'disabled':''}>${l.n} ${fm(l.p)}</button>`;});
+h+=`</div><h3 style="margin-top:12px">💊 Salud Sexual</h3><div class="grid2">`;
+ANTICONCEPTIVOS.forEach((a,i)=>{h+=`<button onclick="buyAnticonceptivo(${i})">${a.n}<br><span class="dim">$${a.p}</span></button>`;});
+h+=`</div></div>`;return h;}
+function renderCarrera(){
+let h='';
+h+='<div class="card"><h3>🏫 Escuela</h3>';
+if(P.edu.enEscuela&&P.edad>=6&&P.edad<18)h+=`<p>Grado: ${P.edu.grado} · En escuela</p>`;
+else if(P.edu.graduado)h+=`<p>🎓 Graduado</p>`;
+else if(P.edu.salio)h+=`<p class="red">🚪 Dejaste la escuela (enfocado en fútbol)</p>`;
+h+=`<p>Intel: ${Math.round(P.edu.nivel)} | Notas: ${P.edu.notas}</p>`;
+h+=`<div class="grid2"><button onclick="doStudy()">📖 Estudiar</button><button onclick="doExam()">📝 Examen</button></div>`;
+if(P.edad>=14&&P.edu.enEscuela&&!P.edu.salio){
+h+=`<button class="red" onclick="dejarEscuela()" style="width:100%">🚪 Dejar escuela (enfocarme en fútbol)</button>`;}
+h+='</div>';
+h+='<div class="card"><h3>🎓 Universidad</h3>';
+if(!P.edu.graduado){h+=`<p class="dim">🔒 Requiere terminar la escuela (graduado a los 18).</p>`;}
+else{
+if(P.edu.carrera){h+=`<p>${P.edu.carrera.nom} — ${P.edu.carrera.progreso}%</p>`;
+if(P.edu.carrera.progreso>=100)h+=`<p class="tag grn">¡GRADUADO!</p>`;else h+=`<button onclick="studyDegree()">📚 Estudiar</button>`;}
+else h+=`<button onclick="startDegree()">🎓 Iniciar</button>`;}
+h+='</div>';
+h+='<div class="card"><h3>🎓 Cursos</h3><div class="grid2">';
+for(let k in CURSOS){let c=CURSOS[k];h+=`<button onclick="studyCourse('${k}')">${c.n} ($${c.p})</button>`;}
+h+='</div></div>';
+return h;}
+function dejarEscuela(){
+if(P.edad<14)return;
+P.edu.enEscuela=false;P.edu.salio=true;P.edu.futbolFull=true;
+log('🚪 Dejaste la escuela para enfocarte en fútbol (+30% entrenamiento)',1);
+render();}
+
+// ================= PHONE (4x5, más grande) =================
+function renderPhoneGrid(){
+let apps=[
+['whatsapp','💬','Chat'],['insta','📸','Insta'],['yt','▶️','YouTube'],['tiktok','🎵','TikTok'],['kick','🦵','Kick'],
+['club','⚽','Club'],['bank','🏦','Banco'],['patro','💰','Sponsors'],['neg','💼','Negocios'],['press','🎙️','Prensa'],
+['fame','🎬','Fama'],['familia','👪','Familia'],['dating','💘','Citas'],['gym','🏋️','Gym'],['casino','🎰','Casino'],
+['sel','🏆','Sel'],['med','🏥','Médico'],['drip','👟','Drip'],['life','🏠','Vida'],['post','👔','Post'],
+['museum','🏛️','Museo'],['trofeos','🏆','Trofeos'],['tiendaAnticon','💊','Salud']
+];
+let pageSize=20; // 4 columnas x 5 filas
+let pages=Math.ceil(apps.length/pageSize);
+let wrap=$('phone-wrap');wrap.innerHTML='';
+for(let p=0;p<pages;p++){
+let page=document.createElement('div');page.className='phone-page';
+let slice=apps.slice(p*pageSize,(p+1)*pageSize);
+slice.forEach(a=>{let b=document.createElement('button');
+b.innerHTML=`<span class="ico">${a[1]}</span>${a[2]}`;
+b.onclick=()=>openApp(a[0]);
+page.appendChild(b);});
+wrap.appendChild(page);}
+let dots=$('phone-dots');dots.innerHTML='';
+for(let p=0;p<pages;p++){let d=document.createElement('span');if(p===phonePage)d.className='on';dots.appendChild(d);}
+wrap.onscroll=(e)=>{let idx=Math.round(wrap.scrollLeft/wrap.clientWidth);if(idx!==phonePage){phonePage=idx;dots.querySelectorAll('span').forEach((d,i)=>d.className=i===idx?'on':'');}};
+}
+
+// ================= APPS =================
+function renderApp(){
+let h='';
+if(appOpen==='whatsapp')h=appWhats();
+if(appOpen==='insta')h=appInsta();
+if(appOpen==='yt')h=appYT();
+if(appOpen==='tiktok')h=appTiktok();
+if(appOpen==='kick')h=appKick();
+if(appOpen==='club')h=appClub();
+if(appOpen==='bank')h=appBank();
+if(appOpen==='press')h=appPress();
+if(appOpen==='dating')h=appDating();
+if(appOpen==='familia')h=appFamilia();
+if(appOpen==='gym')h=appGym();
+if(appOpen==='casino')h=appCasino();
+if(appOpen==='sel')h=appSel();
+if(appOpen==='med')h=appMed();
+if(appOpen==='drip')h=appDrip();
+if(appOpen==='museum')h=appMuseum();
+if(appOpen==='life')h=appLife();
+if(appOpen==='post')h=appPost();
+if(appOpen==='patro')h=appPatro();
+if(appOpen==='neg')h=appNeg();
+if(appOpen==='fame')h=appFame();
+if(appOpen==='trofeos')h=appTrofeos();
+if(appOpen==='tiendaAnticon')h=appTiendaAnticon();
+$('app-body').innerHTML=h;}
+function appWhats(){
+let h='<div class="card"><h3>💬 Chats</h3>';
+h+=`<div class="chat-b them"><div class="who">Mamá</div>Hijo, ¿cuándo vienes?</div>`;
+if(P.equipo)h+=`<div class="chat-b them"><div class="who">DT ${P.equipo}</div>Más intensidad</div>`;
+if(P.rel.pareja)h+=`<div class="chat-b them"><div class="who">${P.rel.pareja} 💕</div>¿Cenamos?</div>`;
+if(P.rel.amantes&&P.rel.amantes.length)h+=`<div class="chat-b them"><div class="who">💋 ${P.rel.amantes[0].n}</div>Nos vemos</div>`;
+h+=`<div class="chat-b me">Ok 👍</div></div>`;return h;}
+function appInsta(){
+return`<div class="card"><h3>📸 Instagram</h3>
+<p>👥 ${Math.floor(P.redes.seguidores||0).toLocaleString()}</p>
+<button onclick="doUpload('insta')" ${canUpload('insta')?'':'disabled'}>📷 Subir (1/día, 0⚡)</button>
+<button onclick="doAd('insta')" ${canAd('insta')?'':'disabled'}>💵 Publicidad (1/mes)</button></div>`;}
+function appYT(){
+return`<div class="card"><h3>▶️ YouTube</h3>
+<p>👥 Subs: ${Math.floor(P.redes.yt||0).toLocaleString()}</p>
+<button onclick="doUpload('yt')" ${canUpload('yt')?'':'disabled'}>🎬 Video (1/día, 0⚡)</button>
+<button onclick="doAd('yt')" ${canAd('yt')?'':'disabled'}>💵 Publicidad (1/mes)</button></div>`;}
+function appTiktok(){
+return`<div class="card"><h3>🎵 TikTok</h3>
+<p>👥 ${Math.floor(P.redes.tiktok||0).toLocaleString()}</p>
+<button onclick="doUpload('tiktok')" ${canUpload('tiktok')?'':'disabled'}>🎥 Video (1/día, 0⚡)</button>
+<button onclick="doAd('tiktok')" ${canAd('tiktok')?'':'disabled'}>💵 Publicidad (1/mes)</button></div>`;}
+function appKick(){
+return`<div class="card"><h3>🦵 Kick</h3>
+<p>👥 ${Math.floor(P.redes.kick||0).toLocaleString()}</p>
+<button onclick="doUpload('kick')" ${canUpload('kick')?'':'disabled'}>🔴 Stream (1/día, 0⚡)</button>
+<button onclick="doAd('kick')" ${canAd('kick')?'':'disabled'}>💵 Publicidad (1/mes)</button></div>`;}
+function canUpload(app){return (P.redes.upl||{})[app]!==dayKey();}
+function canAd(app){return (P.redes.adm||{})[app]!==monthKey();}
+function getFollowers(app){if(app==='insta')return P.redes.seguidores||0;if(app==='yt')return P.redes.yt||0;if(app==='tiktok')return P.redes.tiktok||0;if(app==='kick')return P.redes.kick||0;return 0;}
+function addFollowers(app,n){if(app==='insta')P.redes.seguidores=(P.redes.seguidores||0)+n;else if(app==='yt')P.redes.yt=(P.redes.yt||0)+n;else if(app==='tiktok')P.redes.tiktok=(P.redes.tiktok||0)+n;else if(app==='kick')P.redes.kick=(P.redes.kick||0)+n;}
+function doUpload(app){
+if(!canUpload(app))return;
+P.redes.upl=P.redes.upl||{};P.redes.upl[app]=dayKey();
+let gain=ri(50,300)+Math.round(P.fama*5)+(P.dripScore||0)*2;
+if(P.edu.cursos.marketing>0)gain*=2;
+if(Math.random()<0.05){gain*=10;log('🚀 VIRAL +'+gain,1);}
+addFollowers(app,gain);
+log('📤 Subiste contenido (+'+gain+')');
+render();if(appOpen)renderApp();}
+function doAd(app){
+if(!canAd(app))return;
+P.redes.adm=P.redes.adm||{};P.redes.adm[app]=monthKey();
+let f=getFollowers(app);
+let pay=Math.round(f*0.02)+500;
+P.dinero+=pay;
+log('💵 Publicidad '+app+': +'+fm(pay),1);
+render();if(appOpen)renderApp();}
+function appClub(){
+let h='';
+if(!P.equipo)return'<div class="card"><p>Sin equipo</p></div>';
+h+=`<div class="card"><h3>🏟️ ${P.equipo}</h3>`;
+let win=isTransferWindow();
+h+=`<p>${P.liga?P.liga.liga+' ('+P.liga.pais+')':''}</p>`;
+h+=`<p>💰 ${fm(P.contrato?.salario||0)}/mes · 📅 ${P.contrato?.meses||0} meses</p>
+<p>🔔 ${win?'<span class="tag grn">ABIERTO</span>':'<span class="tag red">CERRADO</span>'}</p>
+<div class="grid2"><button onclick="requestTransfer()">📝 Traspaso</button><button onclick="requestLoan()">🔄 Préstamo</button></div></div>`;
+if(P.tabla){
+h+=`<div class="card"><h3>📊 Tabla (TU equipo resaltado)</h3><table><tr><th>#</th><th>Eq</th><th>Pts</th><th>GF</th></tr>`;
+[...P.tabla].sort((a,b)=>b.pts-a.pts).forEach((t,i)=>{h+=`<tr ${t.n===P.equipo?'style="background:#1e3a5f"':''}><td>${i+1}</td><td>${t.n}</td><td>${t.pts}</td><td>${t.gf}</td></tr>`;});
+h+='</table></div>';}
+if(P.equipoJuvenil&&P.tablaJuvenil){
+h+=`<div class="card club-card"><h3>⚽ JUVENILES: ${P.equipoJuvenil}</h3>`;
+h+=`<table><tr><th>#</th><th>Equipo</th><th>Pts</th><th>PJ</th></tr>`;
+[...P.tablaJuvenil].sort((a,b)=>b.pts-a.pts).forEach((t,i)=>{
+h+=`<tr ${t.n===P.equipoJuvenil?'style="background:#1e3a5f"':''}><td>${i+1}</td><td>${t.n}</td><td>${t.pts}</td><td>${t.pj}</td></tr>`;});
+h+='</table></div>';}
+if(P.companeros){
+h+=`<div class="card"><h3>👥 Plantilla</h3><table><tr><th>Jugador</th><th>Media</th></tr>`;
+P.companeros.slice(0,10).forEach(c=>{h+=`<tr><td>${c.nom}</td><td>${c.media}</td></tr>`;});
+h+=`<tr style="background:#78350f"><td><b>${P.nom}</b></td><td>${getMedia()}</td></tr></table></div>`;}
+return h;}
+function appBank(){
+if(P.edad<16)return`<div class="card"><h3>🏦 Banco</h3><p class="red">🔒 Necesitas 16+</p></div>`;
+let h=`<div class="card"><h3>🏦 Banco</h3>
+<p>💰 ${fm(P.dinero)} | 🏦 ${fm(P.ahorros)}</p>
+<div class="grid2"><button onclick="bankMove(1000,1)">+$1k</button><button onclick="bankMove(1000,-1)">-$1k</button></div></div>`;
+if(P.edu.cursos.finanzas>0){h+=`<div class="card"><h3>📈 Inversiones</h3><p>${fm(P.inversion||0)}</p><button onclick="invest()">+$1k</button><button onclick="withdrawInvest()">Retirar</button></div>`;}
+h+=`<div class="card"><h3>👨‍👩 Pedir a Familia</h3><button onclick="pedirFamilia(500)">$500</button><button onclick="pedirFamilia(2000)">$2k</button></div>`;
+return h;}
+function pedirFamilia(monto){
+let relTotal=(P.familia.relMadre||0)+(P.familia.relPadre||0);
+let prob=relTotal/400;
+if(Math.random()<prob){P.dinero+=monto;log('👨‍👩 +'+fm(monto),1);rainMoney();}
+else log('👨‍👩‍ No prestó');
+render();if(appOpen)renderApp();}
+function appNeg(){
+let h=`<div class="card"><h3>💼 Negocios</h3>`;
+EMPS.forEach((e,i)=>{h+=`<button onclick="crearEmpresa(${i})">${e.n} (${fm(e.p)})</button>`;});
+h+='</div>';
+if(P.empresas.length){
+h+=`<div class="card"><h3>📈 Mis Empresas</h3>`;
+P.empresas.forEach((e,idx)=>{
+let sucursales=(e.sucursales||[]).length;
+let famaEmp=(P.fama||0)+(e.nivel||1)*5;
+let enviosDiarios=Math.round((famaEmp/10)*(sucursales+1));
+let gananciaDiaria=enviosDiarios*(e.precio||50)*(e.catalogoActivo?1:0);
+h+=`<div style="padding:8px 0;border-bottom:1px solid var(--border)">
+<b>${e.tipo}</b> · Nv ${e.nivel||1} · ${sucursales+1} locales<br>
+<span class="dim">📦 ${enviosDiarios}/día · ~${fm(gananciaDiaria)}/día</span><br>
+<button onclick="armarCatalogo(${idx})">📋 Catálogo</button>
+<button onclick="toggleCatalogo(${idx})" ${!e.catalogoArmado?'disabled':''}>${e.catalogoActivo?'⏸️':'▶️'}</button>
+<button onclick="setPrecio(${idx})">💵</button>
+<button onclick="upgradeEmpresa(${idx})">⬆️</button>
+<button onclick="expandirEmpresa(${idx})">🌍 (${fm(e.inv*0.8)})</button>
+</div>`;});
+h+='</div>';}
+return h;}
+function armarCatalogo(idx){
+let e=P.empresas[idx];
+if(e.catalogoArmado)return showModal('📋','<p>Ya armado</p>');
+let h='<h3>📋 Catálogo</h3>'+(e.catalogo||[]).map(c=>`<div><label><input type="checkbox" class="cat-chk" value="${c}" checked> ${c}</label></div>`).join('');
+showModal('📋 Catálogo',h,`<button class="grn" onclick="confirmCatalogo(${idx})">✅ Armar</button>`);}
+function confirmCatalogo(idx){
+let chks=document.querySelectorAll('.cat-chk:checked');
+P.empresas[idx].catalogoSel=Array.from(chks).map(c=>c.value);
+P.empresas[idx].catalogoArmado=true;
+log('📋 Catálogo armado',1);closeModal();render();}
+function toggleCatalogo(idx){P.empresas[idx].catalogoActivo=!P.empresas[idx].catalogoActivo;log(P.empresas[idx].catalogoActivo?'▶️':'⏸️');render();}
+function setPrecio(idx){let p=prompt('Precio ($):',P.empresas[idx].precio||50);if(p){P.empresas[idx].precio=parseInt(p);render();}}
+function upgradeEmpresa(idx){let e=P.empresas[idx];let cost=Math.round(e.inv*0.5*(e.nivel||1));if(P.dinero<cost)return;P.dinero-=cost;e.nivel++;log('⬆️ Nv '+e.nivel,1);render();}
+function expandirEmpresa(idx){
+let e=P.empresas[idx];
+let destino=pick(PAISES.filter((p,i)=>i!==P.pi));
+let cost=Math.round(e.inv*0.8);
+if(P.dinero<cost)return showModal('💸','Necesitas '+fm(cost));
+if((e.sucursales||[]).includes(destino.n))return showModal('❌','Ya en '+destino.n);
+P.dinero-=cost;e.sucursales=e.sucursales||[];e.sucursales.push(destino.n);
+log('🌍 Sucursal en '+destino.n,1);render();}
+function appPatro(){
+let h=`<div class="card"><h3>💰 Sponsors</h3><p>📊 Atractivo: <b>${atractivoComercial()}</b></p>
+<p class="dim">Renovación: 1 vez por AÑO</p></div>`;
+if(P.patrocinios.length){
+h+=`<div class="card"><h3>✅ Activos</h3>`;
+P.patrocinios.forEach(name=>{let b=BRANDS.find(x=>x.n===name);let pago=Math.round(b.pay*(1+P.skill/100));
+let renovable=(b.lastRenov||-1)!==P.año;
+h+=`<div style="padding:6px 0;border-bottom:1px solid var(--border)">
+${b.n} · $${pago}/mes
+<button class="red" onclick="cancelarSponsor('${name}')" style="float:right">❌</button>
+<button onclick="renovarSponsor('${name}')" ${renovable?'':'disabled'} style="float:right">🔄 ${renovable?'Renovar':'(1/año)'}</button></div>`;});
+h+='</div>';}
+let cats=['deportiva','lujo','bebida','tech','auto','life'];
+cats.forEach(cat=>{
+let disp=BRANDS.filter(b=>b.cat===cat&&!P.patrocinios.includes(b.n));
+if(disp.length){
+h+=`<div class="card"><h3>${cat.toUpperCase()}</h3>`;
+disp.slice(0,10).forEach(b=>{
+let i=BRANDS.indexOf(b);
+let can=atractivoComercial()>=b.req;
+let pago=Math.round(b.pay*(1+P.skill/100));
+let conflict=P.patrocinios.find(n=>{let bb=BRANDS.find(x=>x.n===n);return bb&&bb.cat===b.cat;});
+h+=`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:.8rem;border-bottom:1px dashed var(--border)">
+<span>${b.n} $${pago}/mes Req${b.req}</span>
+<button onclick="signSponsor(${i})" ${can&&!conflict?'':'disabled'}>${can&&!conflict?'Firmar':'🔒'}</button></div>`;});
+h+='</div>';}
+});
+return h;}
+function cancelarSponsor(name){
+let i=P.patrocinios.indexOf(name);
+if(i>=0){P.patrocinios.splice(i,1);P.rep=cl(P.rep-5,0,100);log('❌ '+name,1);}
+render();if(appOpen)renderApp();}
+function renovarSponsor(name){
+let b=BRANDS.find(x=>x.n===name);if(!b)return;
+if((b.lastRenov||-1)===P.año)return showModal('❌','Ya renovaste este año');
+let pagoNuevo=Math.round(b.pay*(1+P.skill/80));
+showModal('🔄 Renovar '+name,`<p>Pago nuevo: <b>${fm(pagoNuevo)}/mes</b> (1/año)</p>`,
+`<button class="grn" onclick="confirmarRenovo('${name}',${pagoNuevo})">✅</button><button onclick="closeModal()">No</button>`);}
+function confirmarRenovo(name,pago){
+let b=BRANDS.find(x=>x.n===name);b.pay=pago;b.lastRenov=P.año;
+log('🔄 '+name+' a '+fm(pago),1);closeModal();render();}
+function appFame(){
+let h=`<div class="card"><h3>🎬 Eventos Fama</h3><p class="dim">Límite 4/año: ${P.eventosFamaEsteAño||0}/4</p></div>`;
+EVENTOS_FAMA.forEach((e,i)=>{
+let can=P.fama>=e.req&&(P.eventosFamaEsteAño||0)<4;
+h+=`<button onclick="eventoFama(${i})" ${can?'':'disabled'}>${e.n} (+${e.fama})</button>`;});
+return h;}
+function appPress(){
+let h=`<div class="card"><h3>🎙️ Prensa</h3><p>Rep: ${Math.round(P.rep)}</p>`;
+if(P.prensa.rumor)h+=`<div style="background:#7f1d1d;padding:10px;border-radius:8px"><b>⚠️</b> ${P.prensa.rumor}</div>
+<div class="grid2"><button onclick="handleRumor('live')">🔴</button><button onclick="handleRumor('comunicado')">📄</button><button onclick="handleRumor('demanda')">⚖️</button><button onclick="handleRumor('ignorar')">🤫</button></div>`;
+else h+=`<p class="dim">Sin rumores</p>`;
+h+='</div>';return h;}
+function appDating(){
+let h=`<div class="card"><h3>💘 Relación Oficial</h3>`;
+if(P.rel.estado==='soltero')h+=`<button class="pur" onclick="goDate()">💘 Buscar Novia ($200)</button>`;
+else{
+h+=`<p><b>${P.rel.pareja}</b> · ${P.rel.satisf}% ${P.rel.casado?'💍':''}</p>
+<button onclick="giftPartner()">🎁</button>
+<button onclick="marry()">💍 Casarse</button>
+<button onclick="sexoPareja()">🔥 Sexo</button>
+<button onclick="pedirAnticonceptivo()">💊 Anticonceptivo</button>
+<button class="red" onclick="breakup()">💔</button>`;}
+h+='</div>';
+h+=`<div class="card"><h3>💋 Amantes (sin límite)</h3>`;
+if(P.rel.amantes&&P.rel.amantes.length){
+P.rel.amantes.forEach((a,i)=>{
+h+=`<div style="padding:6px 0;border-bottom:1px solid var(--border)"><b>${a.n}</b> · ${a.satisf}%<br>
+<button onclick="sexoAmante(${i})">🔥 Sexo</button>
+<button onclick="dejarAmante(${i})">🚫 Dejar</button></div>`;});
+}else h+=`<p class="dim">Sin amantes</p>`;
+h+=`<button onclick="searchLover()">💋 Buscar Amante</button></div>`;
+h+=`<div class="card"><h3>👶 Hijos (${P.hijosEsteAño||0}/1 este año)</h3>`;
+if(P.hijos.length){P.hijos.forEach(x=>{h+=`<p>${x.n} ${x.sexo} (${x.madre})</p>`;});}
+else h+=`<p class="dim">Sin hijos</p>`;
+if(P.embarazo.activo)h+=`<p class="gold">🤰 Embarazo mes ${Math.floor(P.embarazo.meses)}/9 (${P.embarazo.madre})</p>`;
+h+=`<p class="dim">Los hijos llegan vía 🔥 sexo (16+), 1 por año, sin límite total.</p></div>`;
+if(P.rel.casado){h+=`<div class="card"><h3>💍 Bodas</h3>`;BODAS.forEach((b,i)=>{h+=`<button onclick="boda(${i})">${b.n} ${fm(b.p)}</button>`;});h+='</div>';}
+return h;}
+function sexoPareja(){
+if(P.edad<16)return showModal('🔞','Mínimo 16 años');
+if(!P.rel.pareja)return showModal('❌','Necesitas pareja');
+if(Math.random()<0.6){P.felicidad=cl(P.felicidad+8,0,100);P.rel.satisf=cl(P.rel.satisf+5,0,100);log('🔥 Sexo con '+P.rel.pareja,1);}
+else log('🔥 Noche regular');
+intentoEmbarazo(P.rel.pareja);
+render();}
+function sexoAmante(i){
+if(P.edad<16)return showModal('🔞','Mínimo 16');
+let a=P.rel.amantes[i];if(!a)return;
+if(Math.random()<0.6){P.felicidad=cl(P.felicidad+8,0,100);a.satisf=cl(a.satisf+5,0,100);log('🔥 Sexo con '+a.n,1);}
+else log('🔥 Noche regular');
+if(Math.random()<0.2){P.prensa.rumor='Te vieron con '+a.n;P.prensa.crisis=ri(20,60);log('📰 ¡Rumor de amante!',1);}
+intentoEmbarazo(a.n);
+render();}
+function intentoEmbarazo(madre){
+if(P.embarazo.activo)return;
+if(P.edad<16)return;
+if((P.hijosEsteAño||0)>=1)return;
+let prot=P.anticonceptivoDias>0;
+let efic=prot?P.anticonceptivoEfic:0;
+let prob=0.5*(1-efic);
+if(Math.random()<prob){
+P.embarazo={activo:true,meses:0,madre:madre};
+log('🤰 ¡Embarazo! ('+madre+')',1);
+}}
+function dejarAmante(i){P.rel.amantes.splice(i,1);log('🚫 Dejaste amante');render();}
+function pedirAnticonceptivo(){
+if(!P.rel.pareja)return;
+if(Math.random()<0.7){P.rel.satisf=cl(P.rel.satisf+5,0,100);P.anticonceptivoDias=Math.max(P.anticonceptivoDias,30);P.anticonceptivoEfic=0.99;log('💊 Pareja protegida 30 días',1);}
+else{P.rel.satisf=cl(P.rel.satisf-10,0,100);log('💊 Se negó');}
+render();}
+function appFamilia(){
+let h=`<div class="card"><h3>👪 Familia</h3>`;
+if(P.rel.pareja)h+=`<div style="padding:8px 0;border-bottom:1px solid var(--border)"><b>💘 ${P.rel.casado?'💍':'Novia'}: ${P.rel.pareja}</b> · ${P.rel.satisf}%<br>
+<button onclick="giftPartner()">🎁</button><button onclick="sexoPareja()">🔥</button><button onclick="pedirAnticonceptivo()">💊</button></div>`;
+if(P.rel.amantes&&P.rel.amantes.length)h+=`<div style="padding:8px 0;border-bottom:1px solid var(--border)"><b>💋 Amantes:</b> ${P.rel.amantes.map(a=>a.n).join(', ')}<br><span class="dim">(apartado en Citas)</span></div>`;
+if(P.hijos.length){h+=`<div style="padding:8px 0"><b>👶 Hijos</b><br>`;P.hijos.forEach(x=>{h+=`${x.n} ${x.sexo}<br>`;});h+='</div>';}
+if(P.embarazo.activo)h+=`<div class="warn-box" style="background:#78350f">🤰 mes ${Math.floor(P.embarazo.meses)}/9</div>`;
+h+=`<div style="padding:8px 0"><b>👩 Mamá</b> ${P.familia.relMadre}<br><button onclick="regaloFamilia('madre')">🎁 $500</button><button onclick="llamarFamMiembro('madre')">📞</button></div>`;
+if(P.familia.papa)h+=`<div style="padding:8px 0"><b>👨 Papá</b> ${P.familia.relPadre}<br><button onclick="regaloFamilia('padre')">🎁 $500</button><button onclick="pedirFamilia(1000)">💵</button></div>`;
+if(P.familia.hermano)h+=`<div style="padding:8px 0"><b>👦 Hermano</b> ${P.familia.relHermano}<br><button onclick="regaloFamilia('hermano')">🎁 $300</button></div>`;
+if(P.familia.tio)h+=`<div style="padding:8px 0"><b>👴 Tío</b> ${P.familia.relTio}<br><button onclick="negocioTio()">💼</button></div>`;
+h+='</div>';return h;}
+function appGym(){
+return`<div class="card"><h3>🏋️ Gym</h3><p>⚡ ${Math.round(P.energia)} · Media: ${getMedia()}</p>
+<div class="grid2">
+<button onclick="trainAttr('fisico')">💪 (-12⚡)</button>
+<button onclick="trainAttr('velocidad')">⚡ (-12⚡)</button>
+<button onclick="trainAttr('tecnica')">🎯 (-12⚡)</button>
+<button onclick="trainAttr('mentalA')">🧠 (-8⚡)</button>
+</div>
+<button onclick="hireStaff('physio')" ${P.staff.physio?'disabled':''}>💆 Fisio</button>
+<button onclick="hireStaff('psico')" ${P.staff.psico?'disabled':''}>🧠 Psicólogo</button></div>`;}
+function appCasino(){
+if(!PAISES[P.pi].casino)return`<div class="card"><h3>🚫 PROHIBIDO</h3></div>`;
+if(P.edad<18)return`<div class="card"><h3>🔞 18+</h3></div>`;
+return`<div class="casino-neon"><h3 class="neon-title">🎰 CASINO 🎰</h3>
+<p style="color:#ff00ff;text-align:center">💰 ${fm(P.dinero)}</p>
+<div class="slot-reels"><div class="reel">🍒</div><div class="reel">🍋</div><div class="reel">💎</div></div>
+<button class="gold" onclick="gamble('slots')" style="width:100%">🎰 Slots ($200)</button>
+<button class="gold" onclick="gamble('ruleta')" style="width:100%">🎡 Ruleta ($200)</button>
+<button class="gold" onclick="gamble('blackjack')" style="width:100%">🃏 Blackjack ($500)</button>
+<button class="gold" onclick="gamble('poker')" style="width:100%">♠️ Poker ($1000)</button>
+<button class="red" onclick="gamble('crash')" style="width:100%">🚀 CRASH ($500)</button>
+<button class="pur" onclick="playSnake()" style="width:100%">🐍 SNAKE ($500)</button></div>`;}
+function appSel(){
+return`<div class="card"><h3>🏆 Selección</h3>
+<p>${PAISES[P.pi].f} · ${P.seleccion.cat||'—'}</p>
+<p>PJ: ${P.seleccion.pj} · Goles: ${P.seleccion.g}</p>
+<p>Mundial: <b>${P.worldCupYear}</b></p></div>`;}
+function appMed(){
+let h=`<div class="card"><h3>🏥 Médico</h3>`;
+if(P.lesion.activa)h+=`<p class="red">🤕 ${P.lesion.tipo} ${Math.ceil(P.lesion.semanas)} sem</p><button onclick="medVIP()">💉 VIP $5k</button>`;
+else h+=`<p class="grn">✅ Sano</p>`;
+h+='</div>';return h;}
+function appDrip(){
+let h=`<div class="card"><h3>👟 50 Sneakers</h3><p>Drip: ${P.dripScore}</p></div>`;
+h+=`<div class="card"><h3>👟 Icónicas</h3>`;
+SNEAKERS.slice(0,20).forEach((s,i)=>{let owned=P.sneakers.includes(i);
+h+=`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:.8rem;border-bottom:1px dashed var(--border)">
+<span>${s[0]} +${s[2]}</span><button onclick="buySneaker(${i})" ${owned?'disabled':''}>${owned?'✓':fm(s[1])}</button></div>`;});
+h+='</div><div class="card"><h3>👕 Drip</h3>';
+SNEAKERS.slice(20,50).forEach((s,idx)=>{let i=idx+20;let owned=P.sneakers.includes(i);
+h+=`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:.8rem;border-bottom:1px dashed var(--border)">
+<span>${s[0]} +${s[2]}</span><button onclick="buySneaker(${i})" ${owned?'disabled':''}>${owned?'✓':fm(s[1])}</button></div>`;});
+h+='</div>';return h;}
+function appMuseum(){
+if(!P.museo)return`<div class="card"><h3>🏛️ Museo</h3><p>Post-Retiro $20k</p></div>`;
+return`<div class="card"><h3>🏛️ Museo</h3><p>🏆 ${P.palmares.length}</p></div>`;}
+function appLife(){
+let h=`<div class="card"><h3>🏠 Vida</h3><p>Felicidad: ${Math.round(P.felicidad)} | Edad: ${P.edad}</p>
+<button onclick="callFam()">👨‍‍ Familia</button></div>`;
+h+='<div class="card"><h3>✈️ Vacaciones (elige destino)</h3>';
+VACACIONES.forEach((v,i)=>{h+=`<button onclick="vacacionDestino(${i})" style="width:100%;text-align:left"><b>${v.n}</b> ${fm(v.p)} · ${v.dias}d</button>`;});
+h+='</div>';return h;}
+function vacacionDestino(idx){
+let v=VACACIONES[idx];
+if(P.dinero<v.p)return showModal('💸','Necesitas '+fm(v.p));
+P.dinero-=v.p;
+P.felicidad=cl(P.felicidad+v.felicidad,0,100);
+P.mental=cl(P.mental+v.mental,0,100);
+P.energia=cl(P.energia+v.energia,0,100);
+if(v.fama)P.fama=cl(P.fama+v.fama,0,100);
+log('✈️ Vacaciones: '+v.n,1);
+for(let i=0;i<v.dias;i++){P.dia++;if(P.dia>30){P.dia=1;P.mes++;}}
+render();}
+function appPost(){
+if(!P.retirado)return`<div class="card"><p>Sin retirar</p></div>`;
+let h=`<div class="card"><h3>👔 Post-Retiro</h3><div class="grid2">
+<button onclick="startPost('dt')" ${P.postCareer==='dt'?'disabled':''}>👔 DT</button>
+<button onclick="startPost('dd')" ${P.postCareer==='dd'?'disabled':''}>🧠 Dir Dep</button>
+<button onclick="startPost('emb')" ${P.postCareer==='emb'?'disabled':''}>🌍 Embajador</button>
+<button onclick="startPost('owner')" ${P.postCareer==='owner'?'disabled':''}>🏟️ Dueño</button>
+<button onclick="startPost('club_propio')" ${P.clubPropio?'disabled':''}>⚽ Crear Club</button>
+<button onclick="startPost('tv')" ${P.postCareer==='tv'?'disabled':''}>🎙️ TV</button>
+<button onclick="startPost('museo')" ${P.museo?'disabled':''}>🏛️ Museo</button>
+</div></div>`;
+if(P.postCareer==='dt')h+=`<div class="card"><button onclick="coachMatch()">⚽ Dirigir</button></div>`;
+if(P.postCareer==='owner')h+=`<div class="card"><button onclick="ownerSim()">▶️ Simular</button></div>`;
+if(P.clubPropio){
+h+=`<div class="card club-card"><h3>⚽ ${P.clubPropio.nombre}</h3>
+<p>Div: ${P.clubPropio.division}ª | Pts ${P.clubPropio.pts}</p>
+<h4>👥 Plantilla</h4><table><tr><th>Jug</th><th>Media</th></tr>`;
+P.clubPropio.jugadores.slice(0,8).forEach(j=>{h+=`<tr><td>${j.nom}</td><td>${j.media}</td></tr>`;});
+h+='</table>';
+if(P.clubPropio.juvenil){h+=`<h4>👦 Juveniles</h4><table><tr><th>Jug</th><th>Edad</th><th>Media</th></tr>`;
+P.clubPropio.juveniles.slice(0,6).forEach(j=>{h+=`<tr><td>${j.nom}</td><td>${j.edad}</td><td>${j.media}</td></tr>`;});h+='</table>';}
+h+=`<button onclick="contratarDT()">👔 DT ($5k)</button>
+<button onclick="ficharJugador()">⚽ Fichar ($3k)</button>
+<button onclick="ficharJuvenil()">👦 Juvenil ($1k)</button>
+<button onclick="mejorarInstalaciones()">🏟️ ($10k)</button></div>`;}
+return h;}
+function contratarDT(){if(P.dinero<5000)return;P.dinero-=5000;P.clubPropio.dt=pick(NOMBRES)+' '+pick(APELLIDOS);log('👔 DT: '+P.clubPropio.dt,1);render();}
+function ficharJugador(){if(P.dinero<3000)return;P.dinero-=3000;let j={nom:pick(NOMBRES)+' '+pick(APELLIDOS),pos:'MC',skill:ri(50,85),energia:ri(60,95),edad:ri(18,32)};j.media=Math.round((j.skill+j.energia)/2);P.clubPropio.jugadores.push(j);log('⚽ '+j.nom,1);render();}
+function ficharJuvenil(){if(P.dinero<1000)return;P.dinero-=1000;let j={nom:pick(NOMBRES)+' '+pick(APELLIDOS),pos:'DC',skill:ri(30,60),energia:ri(70,95),edad:ri(15,19)};j.media=Math.round((j.skill+j.energia)/2);P.clubPropio.juveniles.push(j);log('👦 '+j.nom,1);render();}
+function mejorarInstalaciones(){if(P.dinero<10000)return;P.dinero-=10000;P.clubPropio.jugadores.forEach(j=>{j.skill=cl(j.skill+2,0,99);j.media=Math.round((j.skill+j.energia)/2);});log('🏟️ +2 skill',1);render();}
+function appTrofeos(){return renderVitrinaTrofeos();}
+function appTiendaAnticon(){
+let h=`<div class="card"><h3>💊 Salud Sexual</h3>`;
+if(P.anticonceptivoDias>0)h+=`<p class="grn">🛡️ ${P.anticonceptivoDias} días activos</p>`;
+else h+=`<p class="red">⚠️ Sin protección</p>`;
+h+='</div><div class="card"><h3>Productos</h3>';
+ANTICONCEPTIVOS.forEach((a,i)=>{h+=`<button onclick="buyAnticonceptivo(${i})" style="width:100%;text-align:left"><b>${a.n}</b> $${a.p} · ${a.duracion}d · ${(a.eficacia*100).toFixed(1)}%</button>`;});
+h+='</div>';return h;}
+
+// ================= ACCIONES =================
+function doTrain(){if(P.energia<15)return showModal('⚡','Sin energía');P.energia-=15;P.diasSinEntrenar=0;let g=(P.edad<20?0.3:0.15)*facMult();if(P.edu.futbolFull)g*=1.3;P.fisico=cl(P.fisico+g,0,99);P.tecnica=cl(P.tecnica+g*0.5,0,99);P.skill=calcSkill();log('🏋️ Skill '+P.skill);render();}
+function doStudy(){if(P.energia<10)return;P.energia-=10;P.edu.nivel+=1;log('📖 Estudiaste');render();}
+function doParty(){if(P.edad<18)return showModal('🔞','18+');P.felicidad=cl(P.felicidad+10,0,100);P.salud=cl(P.salud-5,0,100);P.fama=cl(P.fama+1,0,100);log('🎉 Fiesta');render();}
+function hireTrainer(){if(P.dinero<500)return;P.dinero-=500;P.staff.trainer=true;log('🏋️ Entrenador',1);render();}
+function trainAttr(a){if(P.energia<8)return showModal('⚡','Sin energía');P.energia-=a==='mentalA'?8:12;P.diasSinEntrenar=0;let g=ri(1,3)*facMult();if(P.edu.futbolFull)g*=1.3;P[a]=cl(P[a]+g,0,99);P.skill=calcSkill();log('🏋️ Skill '+P.skill);render();if(appOpen)renderApp();}
+function hireStaff(role){let costs={physio:2000,psico:3000};if(P.dinero<costs[role])return;P.dinero-=costs[role];P.staff[role]=true;log('🤝 Staff');render();if(appOpen)renderApp();}
+function eatFood(i){
+P.comidasMes=(P.comidasMes||0)+1;
+if(P.comidasMes>7){showModal('🍽️','<p>Máx 7 comidas por MES</p>');P.comidasMes=7;render();return;}
+let f=FOODS[i];if(P.dinero<f.p)return showModal('💸','Sin fondos');P.dinero-=f.p;
+for(let k in f.fx){if(P[k]!==undefined)P[k]=cl(P[k]+f.fx[k],0,100);}
+if(P.comidasMes>5){P.skill=cl(P.skill-0.5,0,99);P.fisico=cl(P.fisico-0.3,20,99);log('🍽️ '+f.n+' ⚠️ ('+P.comidasMes+'/7 mes)');}
+else log('🍽️ '+f.n+' ('+P.comidasMes+'/7 mes)');
+render();if(appOpen)renderApp();}
+function buyAnticonceptivo(i){
+let a=ANTICONCEPTIVOS[i];
+if(P.dinero<a.p)return showModal('💸','Sin fondos');
+P.dinero-=a.p;P.anticonceptivo=a.n;
+P.anticonceptivoDias=Math.max(P.anticonceptivoDias,a.duracion);
+P.anticonceptivoEfic=a.eficacia;
+log('💊 '+a.n,1);render();if(appOpen)renderApp();}
+function buyBotines(i){if((P.botinesOwned||[]).includes(i))return;let b=BOTINES[i];if(P.dinero<b.p)return;P.dinero-=b.p;P.botinesOwned.push(i);for(let k in b.fx){if(P[k]!==undefined)P[k]=cl(P[k]+b.fx[k],0,99);}P.skill=calcSkill();P.dripScore+=b.drip;log('🥾 '+b.n,1);render();}
+function buyLujo(i){let l=LUJOS[i];if(!P.luxuries)P.luxuries=[];if(P.luxuries.find(x=>x.n===l.n))return;if(P.dinero<l.p)return;P.dinero-=l.p;P.luxuries.push(l);P.fama=cl(P.fama+5,0,100);log('🛥️ '+l.n,1);render();}
+function crearEmpresa(i){let e=EMPS[i];if(P.dinero<e.p)return;P.dinero-=e.p;P.empresas.push({tipo:e.n,inv:e.p,nivel:1,sucursales:[],catalogo:e.cat,precio:50,catalogoArmado:false,catalogoActivo:false,pais_origen:PAISES[P.pi].n});log('💼 '+e.n,1);render();if(appOpen)renderApp();}
+function backToMenu(){if(P)localStorage.setItem('canterano_v3',JSON.stringify(P));closeModal();go('start');}
+function signSponsor(i){
+let b=BRANDS[i];
+if(atractivoComercial()<b.req)return showModal('❌','Atractivo insuficiente');
+let conflict=P.patrocinios.find(n=>{let bb=BRANDS.find(x=>x.n===n);return bb&&bb.cat===b.cat;});
+if(conflict)return showModal('⚠️','Ya tienes '+conflict);
+P.patrocinios.push(b.n);log('💰 '+b.n,1);render();if(appOpen)renderApp();}
+function eventoFama(i){
+let e=EVENTOS_FAMA[i];
+if(P.fama<e.req||(P.eventosFamaEsteAño||0)>=4)return;
+if(P.energia<e.energ)return showModal('⚡','Sin energía');
+P.energia-=e.energ;P.fama=cl(P.fama+e.fama,0,100);P.dinero+=e.pago;P.redes.seguidores+=ri(10000,50000);
+P.eventosFamaEsteAño=(P.eventosFamaEsteAño||0)+1;
+log('🎬 '+e.n,1);rainMoney();render();if(appOpen)renderApp();}
+function actividadJoven(i){let a=ACTIVIDADES_JOVENES[i];if(P.dinero<a.p)return;P.dinero-=a.p;for(let k in a.fx){if(P[k]!==undefined)P[k]=cl(P[k]+a.fx[k],0,100);}log(a.n);render();}
+function studyCourse(c){let cost=CURSOS[c].p;if(P.dinero<cost)return;P.dinero-=cost;P.edu.cursos[c]=(P.edu.cursos[c]||0)+1;log('🎓 '+CURSOS[c].n,1);render();}
+function startDegree(){if(!P.edu.graduado)return showModal('🔒','Termina la escuela primero');if(P.edu.carrera)return;let c=pick(['Administración','Derecho','Marketing','Dir Técnica']);P.edu.carrera={nom:c,progreso:0};log('🎓 '+c,1);render();}
+function studyDegree(){if(!P.edu.carrera)return;if(P.energia<15)return;P.energia-=15;P.edu.carrera.progreso=cl(P.edu.carrera.progreso+10,0,100);if(P.edu.carrera.progreso>=100){log('🎓 Graduado',1);P.rep+=15;}render();}
+function invest(){if(P.dinero<1000)return;P.dinero-=1000;P.inversion=(P.inversion||0)+1000;log('📈 +$1k');render();if(appOpen)renderApp();}
+function withdrawInvest(){if(!P.inversion)return;P.dinero+=P.inversion;P.inversion=0;render();if(appOpen)renderApp();}
+function bankMove(amt,dir){if(dir>0){if(P.dinero<amt)return;P.dinero-=amt;P.ahorros+=amt;}else{if(P.ahorros<amt)return;P.ahorros-=amt;P.dinero+=amt;}render();if(appOpen)renderApp();}
+function gamble(type){
+let bet=type==='blackjack'?500:type==='poker'?1000:type==='crash'?500:200;
+if(P.dinero<bet)return;P.dinero-=bet;
+let win=0,txt='';
+if(type==='slots'){
+document.querySelectorAll('.reel').forEach(r=>r.classList.add('spinning'));
+let roll=Math.random();
+setTimeout(()=>{
+document.querySelectorAll('.reel').forEach(r=>r.classList.remove('spinning'));
+let reels=document.querySelectorAll('.reel');
+if(roll<0.02){reels[0].innerText='💎';reels[1].innerText='💎';reels[2].innerText='💎';win=bet*10;txt='JACKPOT';}
+else if(roll<0.10){reels[0].innerText='7️⃣';reels[1].innerText='7️⃣';reels[2].innerText='7️⃣';win=bet*5;txt='777!';}
+else if(roll<0.25){reels[0].innerText='🍒';reels[1].innerText='🍒';reels[2].innerText='🍒';win=bet*2;txt='Cerezas';}
+else{txt='Perdiste';}
+P.dinero+=win;log('🎰 '+txt+(win?' +'+fm(win):''));if(win>bet)rainMoney();render();if(appOpen)renderApp();},800);
+return;}
+if(type==='crash'){
+let mult=1.0;let crashPoint=1+Math.random()*Math.random()*10;let cashOut=0;
+showModal('🚀 CRASH','<p class="crash-mult" id="crash-mult">1.00x</p>','<button class="grn" id="crash-cashout">💰 Retirar</button>');
+let interval=setInterval(()=>{
+mult+=0.1+Math.random()*0.2;
+let el=$('crash-mult');if(el)el.innerText=mult.toFixed(2)+'x';
+if(mult>=crashPoint){clearInterval(interval);if(el){el.innerText='💥 BOOM';el.classList.add('boom');}
+setTimeout(()=>{if(cashOut>0){P.dinero+=cashOut;log('🚀 +'+fm(cashOut-bet),1);}else log('🚀 -'+fm(bet));closeModal();render();},1500);}
+},200);
+$('crash-cashout').onclick=()=>{clearInterval(interval);cashOut=Math.round(bet*mult);closeModal();P.dinero+=cashOut;log('🚀 +'+fm(cashOut-bet),1);render();};
+return;}
+if(type==='poker'){if(Math.random()<0.45){win=bet*2;txt='Poker';}else txt='Perdiste';}
+else if(type==='blackjack'){if(Math.random()<0.48){win=bet*2;txt='BJ';}else txt='Pasaste';}
+else if(type==='ruleta'){if(Math.random()<0.47){win=bet*2;txt='Ruleta';}else txt='Perdiste';}
+P.dinero+=win;log(txt+(win?' +'+fm(win):' -'+fm(bet)));
+if(win>bet)rainMoney();render();if(appOpen)renderApp();}
+let snakeGame=null;
+function playSnake(){
+let bet=500;if(P.dinero<bet)return showModal('💸','$500');
+P.dinero-=bet;
+showModal('🐍 SNAKE','<canvas id="snake-canvas" class="snake-canvas" width="300" height="300"></canvas><p id="snake-score">0</p>','<button class="red" onclick="endSnake(false)">💀</button>');
+startSnakeGame();}
+function startSnakeGame(){
+let canvas=$('snake-canvas');if(!canvas)return;
+let ctx=canvas.getContext('2d');let grid=15,cell=20;
+let snake=[{x:5,y:5}],dir={x:1,y:0},food={x:10,y:10},score=0;
+document.onkeydown=(e)=>{let k=e.key.toLowerCase();
+if((k==='arrowup'||k==='w')&&dir.y!==1)dir={x:0,y:-1};
+else if((k==='arrowdown'||k==='s')&&dir.y!==-1)dir={x:0,y:1};
+else if((k==='arrowleft'||k==='a')&&dir.x!==1)dir={x:-1,y:0};
+else if((k==='arrowright'||k==='d')&&dir.x!==-1)dir={x:1,y:0};};
+let loop=setInterval(()=>{
+let head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+if(head.x<0||head.x>=grid||head.y<0||head.y>=grid||snake.some(s=>s.x===head.x&&s.y===head.y)){clearInterval(loop);endSnake(false,score);return;}
+snake.unshift(head);
+if(head.x===food.x&&head.y===food.y){score++;$('snake-score').innerText=score;food={x:ri(0,grid-1),y:ri(0,grid-1)};}
+else snake.pop();
+ctx.fillStyle='#000';ctx.fillRect(0,0,300,300);
+ctx.fillStyle='#22c55e';snake.forEach(s=>ctx.fillRect(s.x*cell,s.y*cell,cell-2,cell-2));
+ctx.fillStyle='#ef4444';ctx.fillRect(food.x*cell,food.y*cell,cell-2,cell-2);
+},150);
+snakeGame={loop};}
+function endSnake(win,score){
+if(snakeGame)clearInterval(snakeGame.loop);
+document.onkeydown=null;
+if(win===false&&score===undefined){closeModal();log('🐍 -500');render();return;}
+let g=(score||0)*100;
+if(g>0){P.dinero+=g;log('🐍 +$'+g,1);rainMoney();}else log('🐍 -500');
+closeModal();render();}
+function goDate(){if(P.dinero<200||P.energia<10)return;P.dinero-=200;P.energia-=10;if(Math.random()<0.5){P.rel.estado='pareja';P.rel.pareja=pick(['Sofía','Valentina','Camila','Martina','Lucía','Isabella']);P.rel.satisf=70;P.mental+=8;log('💘 '+P.rel.pareja,1);}else log('💔 Fallida');render();if(appOpen)renderApp();}
+function giftPartner(){if(P.dinero<1000)return;P.dinero-=1000;P.rel.satisf=cl(P.rel.satisf+15,0,100);P.mental+=5;log('🎁');render();if(appOpen)renderApp();}
+function marry(){if(P.dinero<10000)return;P.dinero-=10000;P.rel.casado=true;P.parejaOficial=true;log('💍 Casado con '+P.rel.pareja,1);render();if(appOpen)renderApp();}
+function breakup(){P.rel.estado='soltero';P.rel.pareja=null;P.rel.satisf=0;P.rel.casado=false;P.parejaOficial=false;P.mental-=15;log('💔');render();if(appOpen)renderApp();}
+function searchLover(){let n=pick(['Modelo X','Influencer Y','Actriz Z','Fitness A','DJ B']);P.rel.amantes=P.rel.amantes||[];P.rel.amantes.push({n:n,satisf:60});log('💋 Amante: '+n+' (sin límite)',1);render();if(appOpen)renderApp();}
+function boda(i){let b=BODAS[i];if(P.dinero<b.p)return;P.dinero-=b.p;P.fama=cl(P.fama+b.fama,0,100);P.rep=cl(P.rep+b.rep,0,100);log('💍 '+b.n,1);rainMoney();render();if(appOpen)renderApp();}
+function callFam(){P.felicidad=cl(P.felicidad+5,0,100);P.mental+=3;log('📞 Familia');render();}
+function regaloFamilia(m){let costs={madre:500,padre:500,hermano:300};let c=costs[m];if(P.dinero<c)return;P.dinero-=c;P.familia['rel'+m.charAt(0).toUpperCase()+m.slice(1)]=cl((P.familia['rel'+m.charAt(0).toUpperCase()+m.slice(1)]||0)+10,0,100);log('🎁 '+m);render();if(appOpen)renderApp();}
+function llamarFamMiembro(m){P.felicidad+=3;P.mental+=2;log('📞 '+m);render();if(appOpen)renderApp();}
+function negocioTio(){if(Math.random()<0.4){let g=ri(2000,8000);P.dinero+=g;log('💼 +'+fm(g),1);}else{let p=ri(1000,5000);P.dinero-=p;log('💼 -'+fm(p),1);}render();if(appOpen)renderApp();}
+function vacation(){vacacionDestino(0);}
+function buySneaker(i){if(P.sneakers.includes(i))return;if(P.dinero<SNEAKERS[i][1])return;P.dinero-=SNEAKERS[i][1];P.sneakers.push(i);P.dripScore+=SNEAKERS[i][2];P.fama++;log('👟 '+SNEAKERS[i][0]);render();if(appOpen)renderApp();}
+function medVIP(){if(P.dinero<5000)return;P.dinero-=5000;if(Math.random()<0.7){P.lesion.semanas=Math.ceil(P.lesion.semanas/2);log('💉 VIP',1);}else{P.salud-=10;log('⚠️');}render();if(appOpen)renderApp();}
+function doExam(){let nota=cl(1+P.edu.nivel/20+Math.random()*2,1,7);P.edu.notas=Math.round(nota*10)/10;log('📝 '+P.edu.notas);render();}
+function ownerSim(){let win=Math.random()<0.5;P.dinero+=win?8000:2000;log(win?'+$8k':'+$2k');render();if(appOpen)renderApp();}
+function die(cause){if(!P)return;showModal('💀 FIN',`<p>${cause}</p><p>Edad: ${P.edad} · Goles: ${P.stats.goles}</p>`,P.iron?'':'<button class="prim" onclick="closeModal();go(\'start\')">🏠</button>');if(P.iron)localStorage.removeItem('canterano_v3');P=null;}
+function showModal(title,body,actions=''){$('modal-box').innerHTML=`<h2 style="margin-bottom:12px">${title}</h2><p style="margin-bottom:14px;font-size:.9rem">${body}</p><div>${actions||'<button onclick="closeModal()">Cerrar</button>'}</div>`;$('modal').classList.remove('hidden');}
+function closeModal(){$('modal').classList.add('hidden');}
+function saveGame(){if(!P)return;localStorage.setItem('canterano_v3',JSON.stringify(P));showModal('💾','Guardado');}
+function loadGame(){let d=localStorage.getItem('canterano_v3');if(!d)return showModal('❌','Sin partida');P=JSON.parse(d);go('game');render();renderLog();}
+function wipeAll(){if(confirm('¿Borrar TODO?')){localStorage.removeItem('canterano_v3');location.reload();}}
+initCreate();
+setInterval(()=>{if(P)localStorage.setItem('canterano_v3',JSON.stringify(P));},30000);
+</script>
+</body>
+</html>
